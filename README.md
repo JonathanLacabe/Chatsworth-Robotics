@@ -1,6 +1,6 @@
 # Chatsworth Robotics
 This is the official codebase for the Chatsworth Charter High School robotics team.\
-This is not to be confused with the Chatsworth Library Robotics Program.
+This is not to be confused with the Chatsworth Library Robotics Program, found here.
 
 ==To-Do==\
 -Add link to Chatsworth Library Robotics\
