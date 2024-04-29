@@ -72,7 +72,7 @@ bool RemoteControlCodeEnabled = true;
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-27-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-28-2024
 
 
 /*
@@ -121,23 +121,26 @@ would need to be edited to reflect the change.
 using namespace vex;
 
 /*This variable is meant to account for what the joystick is released by the driver, leaving it 
-  slightly off-center. See the driveControl function for usage.
-*/
+  slightly off-center. See the driveControl function for usage.*/
 float DEADZONE = 15.0;
 
 // Begin project code
 
+
+
+
 //===AUTONOMOUS FUNCTIONS===
 /*The four functions below, driveLat, turnDrive, moveArm, and driveSpeed, are primarily designed
   to be used in the code for the 15-second autonomous(void) routine.
-*/
+  */
 
-//DRIVELAT:
+//driveLat(double degree)
 //This function moves the robot forward or backward.
+
 /*Parameter:
     double degree
     This takes in a value used to tell the motors how many degrees to move backward or forward.
-    The number of degrees is not relavent to anything except for the brain's encoder.
+    The number of degrees is not relevant to anything except for the brain's encoder.
     A positive value will move the robot forward, while negative degrees will move the robot
     backwards.
 */
@@ -147,7 +150,7 @@ void driveLat(double degree){
     this line has completed. The false statement allows mulltiple lines to run simultaneously, 
     which is useful as this function is designed to move all of the wheel motors to move in one 
     direction.
-    These lines are present in only two fo the autonomous functions.
+    These lines are present in only two of the autonomous functions.
   */
   leftBackMotor2.spinFor(forward, degree, degrees, false);
   leftMiddleMotor7.spinFor(forward, degree, degrees, false);
@@ -162,6 +165,18 @@ void driveLat(double degree){
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
 
+
+//turnDrive(double degree)
+//This function turns the robot in a given direction.
+
+/*Parameter:
+    double degree
+    The 'degree' inputted by the user is used to tell the motors how many degrees to pivot the
+    robot in place.
+    The number of degrees is not relevant to anything except for the brain's encoder.
+    A positive value will move the robot forward, while negative degrees will move the robot
+    backwards.
+*/
 void turnDrive(double degree){
   // if val +, move left. if val -, move right.
   leftBackMotor2.spinFor(reverse, degree, degrees, false);
@@ -203,7 +218,10 @@ void preAutonomous(void) {
 }
 
 
-//IMPORTANT NOTE: When establishing an autonomous routine, make sure to enable
+/*IMPORTANT NOTE: When establishing an autonomous routine, make sure to create an exact, replicatable
+  initial position for the robot to start the routine. It is advised to use tools and other on-hand
+  pieces to create a consistent placement for the robot and other field objects.
+*/
 void autonomous(void) {
 /*
   ~DO NOT GET DISCOURAGED WHEN THE ROBOT PERFORMS A SLIGHTLY ALTERED ROUTINE WITHOUT CHANGES TO THE CODE:~
@@ -212,7 +230,14 @@ void autonomous(void) {
   battery, the autonomous routine of your robot will have changed slightly. This can be frustrating, 
   especially when the code seemed perfected. 
   This is occuring because the brain has a mind of its own (pun intended), as the internal counters
-  and everything fluctuate due to a variety of factors, such as temperature
+  and everything fluctuate due to a variety of factors, such as temperature and battery power. Thus,
+  as the power of the battery decreases, any precise autonomous routine will begin to run at a lower
+  performance with increased error. It is always advised to make changes to the code and to test it
+  at full battery, when the the robot and the internal counters will be at optimal performance.
+  
+  Slight differences in the positioning of the robot, as noted in the important note above the
+  header, can easily result in slight errors snowballing into a non-functional routine. Always
+  ensure a consistent placement and field.
 */
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
