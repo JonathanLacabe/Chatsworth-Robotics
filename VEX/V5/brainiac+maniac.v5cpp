@@ -66,13 +66,13 @@ bool RemoteControlCodeEnabled = true;
 //    Project: VEX V5 Template.                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023 
-//    Most Recent Edit: 2-17-2024
+//    Most Recent Edit: 4-30-2024 (further documentation, minor changes)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-29-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-30-2024
 
 
 /*
@@ -103,15 +103,20 @@ d8'          `8b  `8'        88        88
 What drive control does this program use?
 This program uses tank drive control as per recommendation of the team coach, Sam F.
 
-Does this program utilize
-
 What motors does this program utilize?
 Though utilizing no motor groups (though it may in the future, specifically for the lift motors),
 this program has six wheel motors, three right and three left motors, and two motors for the arm.
 The wheel motors use green cartridges, while the arm motors use red cartridges.
 The Chatsworth Robotics Vex robot is unique in that it has two arm motors, allowing the arm to be 
-held in place when grabbing a triball and to propel itself upward from the ground or from the 
-elevation bar (in Over Under) to achieve an elevated position.
+held in place, useful when grabbing a triball or other actions requiring exact positioning. 
+
+Why aren't the motor encoders used to prevent the arm from hitting the ground?
+This was an initial task that was worked on for some weeks, with some untested code having already 
+been written (the comments visible in older commits). Once it was discovered that the ability of 
+the robot to lift itself off of the ground using the arm was useful for a variety of purposes, we 
+shelved this plan. The idea may be revisited in future robots/designs, however.
+Because the motor encoder is not used, the arm can push the robot upward from the ground or from the 
+elevation bar (in the game Over Under) to achieve an elevated position.
 
 How do I add/change devices (motors, motor groups, controllers)? 
 To add a motor, click the motor icon in the right of the blue area below the taskbar (the leftmost
@@ -127,6 +132,9 @@ Omega robot at Chatsworth, so feel free to change them. The naming system of the
 program is done to relate each motor to its port number, making the code more legible from a 
 hardware perspective. If the name were to change, every instance of this motor used in the code 
 would need to be edited to reflect the change.
+
+Does this program utilize
+
 
 
 
@@ -186,7 +194,7 @@ void driveLat(double degree){
   */
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
-
+0
 
 //turnDrive(double degree)
 //This function turns the robot in a given direction.
@@ -217,15 +225,17 @@ void turnDrive(double degree){
     The 'degree' inputted by the user determines how far the arm motors move upward or downward.
     The arm motor uses the red cartridge, while the wheel motors use green cartridges. Apart from 
     that, the arm motors are identical to the wheel motors, one being reverse and the other normal.
-    The number of degrees is not relevant to anything except for the brain's encoder.
+    The number of degrees is not relevant to anything except for the brain's encoder. Note that 
+    this is the only function that uses the encoder to base movements off of the initial, user-set 
+    position of the motors, as elaborated on within the function.
     A positive value will move the arm downward, while negative degrees will move the arm upward.
 */
 void moveArm(double degree){
   /*The liftMotors are moved into the given position using the spinToPosition function. This is using
-    the built in encoder of the motor, which can recall the initial position of the motor when it was
-    first activated, further detailed in the setPosition function call in the autonomous function.
-    An alternate version of this function with the spinFor function, which does not use the encoder, 
-    can be found in the VEX Template.
+    the built in encoder of the motor, which can recall the initial position of the motor when the 
+    code was first activated, further detailed in the setPosition function call in the autonomous 
+    function. An alternate version of this function with the spinFor function, which does not use 
+    the encoder, can be found in the VEX Template.
   */
   //The false argument below is done for the same purposes as the moveLat and turnDrive functions.
   liftMotor5.spinToPosition(degree, degrees, false);
@@ -233,8 +243,21 @@ void moveArm(double degree){
   
 }
 
+//driveSpeed(double speed)
+//This function sets the velocity of the arm motors or arm motors to be a specific speed.
+
+/*Parameter:
+    double speed
+    The 'speed' inputted by the user is indicative of a percentage of the maximum possible 
+    speed the motors can move. The motors cannot move over 100%, and running the motors 
+    at 100% constantly will burn them out very quickly. Only for very brief periods in the
+    autonomous code are any motors set to 100% velocity.
+    Any below 10% will produce a very slow autonomous.
+*/
+
+//TODO: CHANGE FUNCTION TO HAVE AN ADDITIONAL PARAMETER FOR TYPE, AND A CONDITIONAL TO ALLOW IT TO BE USED FOR 
+//ARM MOTORS AS WELL. CHANGE AUTONOMOUS TO REFLECT THIS.[[[[]]]]
 void driveSpeed(double speed){
-  //0-100, and I'l burn out motors if always set to 100
   leftBackMotor2.setVelocity(speed, percent);
   leftMiddleMotor7.setVelocity(speed, percent);
   leftFrontMotor9.setVelocity(speed, percent);
@@ -244,7 +267,7 @@ void driveSpeed(double speed){
 }
 
 void preAutonomous(void) {
-  // actions to do when the program starts
+  //Actions performed when the program starts.
   Brain.Screen.clearScreen();
   Brain.Screen.print("pre auton code");
   wait(1, seconds);
@@ -314,9 +337,22 @@ if(facingNormal){
   finalTurn = -105;
   lastRun = 551;
 }
-
-  liftMotor5.setPosition(0, degrees);//TO WRITE EXPLANATION FOR[[[[[[[[[[[4-29-2024]]]]]]]]]]]
+  /*In order to faciliate matchloading, and to make the rest of the code moving the arm function
+    (such as the AWP, obtained by touching the horizontal elevation bar with the arm at the end of 
+    the routine), the built-in motor encoder is utilized to make the program remember the initial 
+    position of the liftMotors, e.g. the position that the arm is moved to before autonomous is
+    started. Because of this, it is imperative that the arm is always moved into the same position 
+    before starting, and that all of the code is based off of this initial position. This same
+    logic can be used in an algorithm used for preventing the robot arm from touching the ground,
+    as noted in the FAQ.
+    As the first position of the arm (which, for the Chatsworth Vex V5 Omega robot, entails pushing
+    the arm as far backward as possible) is the base position for all other positions, this 
+    position is rendered as zero in the code.
+  */
+  liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
+
+
     //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
   driveSpeed(90);
   driveLat(963);//drive forward and hit thing into thing
