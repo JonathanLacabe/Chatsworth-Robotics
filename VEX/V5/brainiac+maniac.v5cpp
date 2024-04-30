@@ -27,22 +27,22 @@ brain Brain;
 
 
 // Robot configuration code.
+controller Controller1 = controller(primary);
 motor leftBackMotor2 = motor(PORT2, ratio18_1, false);
 
 motor rightBackMotor4 = motor(PORT4, ratio18_1, true);
 
-controller Controller1 = controller(primary);
-motor liftMotor5 = motor(PORT5, ratio36_1, true);
-
-motor liftMotor10 = motor(PORT10, ratio36_1, false);
-
 motor rightMotor6 = motor(PORT6, ratio18_1, true);
+
+motor rightFrontMotor20 = motor(PORT20, ratio18_1, true);
 
 motor leftMiddleMotor7 = motor(PORT7, ratio18_1, false);
 
 motor leftFrontMotor9 = motor(PORT9, ratio18_1, false);
 
-motor rightFrontMotor20 = motor(PORT20, ratio18_1, true);
+motor liftMotor5 = motor(PORT5, ratio36_1, true);
+
+motor liftMotor10 = motor(PORT10, ratio36_1, false);
 
 
 
@@ -72,7 +72,7 @@ bool RemoteControlCodeEnabled = true;
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-28-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-29-2024
 
 
 /*
@@ -86,19 +86,39 @@ bool RemoteControlCodeEnabled = true;
 d8'          `8b  `8'        88        88  
 
 
-FAQ: 
+
+/*IF YOU ARE IMPORTING THIS CODE FROM GITHUB: MAKE SURE TO ADD THE EIGHT MOTORS AND THE CONTROLLER
+  IN THE DEVICES SCREEN AS DETAILED IN THE FAQ. ENSURE THE GENERATED ROBOT CONFIGURATION OF THE 
+  DEVICES IS IDENTICAL TO THE ONE IN THE GITHUB FILE, AS COPY-PASTING ALONE WILL NOT ADD THE DEVICES
+  INTO THE DEVICES SCREEN. 
+  Unless you want to make your own version of the code with different motors and things, in which 
+  case feel free to change/add whatever you want.
+*/
+
+
+
+/*
+===FAQ===
 
 What drive control does this program use?
-This program uses tank drive control as per reccomendation of the team coach, Sam F.
+This program uses tank drive control as per recommendation of the team coach, Sam F.
 
 Does this program utilize
 
+What motors does this program utilize?
+Though utilizing no motor groups (though it may in the future, specifically for the lift motors),
+this program has six wheel motors, three right and three left motors, and two motors for the arm.
+The wheel motors use green cartridges, while the arm motors use red cartridges.
+The Chatsworth Robotics Vex robot is unique in that it has two arm motors, allowing the arm to be 
+held in place when grabbing a triball and to propel itself upward from the ground or from the 
+elevation bar (in Over Under) to achieve an elevated position.
 
-How do I add/change motors? 
+How do I add/change devices (motors, motor groups, controllers)? 
 To add a motor, click the motor icon in the right of the blue area below the taskbar (the leftmost
-icon). Here, you will be able to add different motors along with their specifications, such as gear
-cartridge and motor direction. If you wish to add a motor group, make sure the motors you choose are
-both moving the same direction (both being left or right motors), especially if using tank control.
+icon) to access the devices screen. Here, you will be able to add different motors along with their 
+specifications, such as gear cartridge and motor direction. If you wish to add a motor group, make 
+sure the motors you choose are both moving the same direction (both being left or right motors), 
+especially if using tank control.
 
 Note: Generally, left motors will be set to "Normal", while right motors will be set to "Reverse". 
 
@@ -150,7 +170,9 @@ void driveLat(double degree){
     this line has completed. The false statement allows mulltiple lines to run simultaneously, 
     which is useful as this function is designed to move all of the wheel motors to move in one 
     direction.
-    These lines are present in only two of the autonomous functions.
+    These lines are present in the driveLat and turnDrive functions, the only ones that set the
+    position of the wheel motors. The moveArm function has similar arguments and setup, except it 
+    uses the built-in motor encoder and the spinToPosition function.
   */
   leftBackMotor2.spinFor(forward, degree, degrees, false);
   leftMiddleMotor7.spinFor(forward, degree, degrees, false);
@@ -178,7 +200,6 @@ void driveLat(double degree){
     backwards.
 */
 void turnDrive(double degree){
-  // if val +, move left. if val -, move right.
   leftBackMotor2.spinFor(reverse, degree, degrees, false);
   leftMiddleMotor7.spinFor(reverse, degree, degrees, false);
   leftFrontMotor9.spinFor(reverse, degree, degrees, false);
@@ -187,16 +208,28 @@ void turnDrive(double degree){
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
 
-void moveArm(double degree){//this could easily be changed to spinToPosition using the encoder, 
-//which would require doing some trial and error to figure out the positioning, would ask to ask sam about that
-  //positive = down, negatives = up
-  if(degree>0){
-    liftMotor5.spinFor(reverse, degree,degrees);
-    liftMotor10.spinFor(reverse, degree,degrees);
-  } else if (degree<0){
-    liftMotor5.spinFor(forward, degree,degrees);
-    liftMotor10.spinFor(forward, degree,degrees);
-  }
+
+//moveArm(double degree)
+//This function moves the arm up and down.
+
+/*Parameter:
+    double degree
+    The 'degree' inputted by the user determines how far the arm motors move upward or downward.
+    The arm motor uses the red cartridge, while the wheel motors use green cartridges. Apart from 
+    that, the arm motors are identical to the wheel motors, one being reverse and the other normal.
+    The number of degrees is not relevant to anything except for the brain's encoder.
+    A positive value will move the arm downward, while negative degrees will move the arm upward.
+*/
+void moveArm(double degree){
+  /*The liftMotors are moved into the given position using the spinToPosition function. This is using
+    the built in encoder of the motor, which can recall the initial position of the motor when it was
+    first activated, further detailed in the setPosition function call in the autonomous function.
+    An alternate version of this function with the spinFor function, which does not use the encoder, 
+    can be found in the VEX Template.
+  */
+  //The false argument below is done for the same purposes as the moveLat and turnDrive functions.
+  liftMotor5.spinToPosition(degree, degrees, false);
+  liftMotor10.spinToPosition(degree, degrees);
   
 }
 
@@ -222,9 +255,11 @@ void preAutonomous(void) {
   initial position for the robot to start the routine. It is advised to use tools and other on-hand
   pieces to create a consistent placement for the robot and other field objects.
 */
-void autonomous(void) {
+void autonomous(void) {/*NOTE: This is the autonomous for the specific Chatsworth Robotics Vex V5 robot.
+                         This can be used as the basis for another autonomus program, but for a clean
+                         template for such purposes, see the VEX Template in the VEX folder.*/
 /*
-  ~DO NOT GET DISCOURAGED WHEN THE ROBOT PERFORMS A SLIGHTLY ALTERED ROUTINE WITHOUT CHANGES TO THE CODE:~
+  ~DO NOT GET DISCOURAGED WHEN THE ROBOT PERFORMS SLIGHTLY DIFFERENT ROUTINES WITHOUT CHANGES TO THE CODE:~
 
   It may occur that on testing changes made to the code the previous day, or even just changing the 
   battery, the autonomous routine of your robot will have changed slightly. This can be frustrating, 
@@ -235,15 +270,20 @@ void autonomous(void) {
   performance with increased error. It is always advised to make changes to the code and to test it
   at full battery, when the the robot and the internal counters will be at optimal performance.
   
-  Slight differences in the positioning of the robot, as noted in the important note above the
-  header, can easily result in slight errors snowballing into a non-functional routine. Always
-  ensure a consistent placement and field.
+  Slight differences in the positioning of the robot, as noted in the important note above the header, 
+  can easily result in slight errors snowballing into a non-functional routine. Always ensure a 
+  consistent placement and field.
 */
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
 
+/*FINAL NOTE: Don't be afraid to use trial and error! The best programs are always created through
+  rigorous testing and patching 999999999 errors/slight inconsistencies. Believe in yourself :3
+*/  
+
 //READ THIS 1-9-2023
 //FOR THE MATCHLOADING, the arm should be set all the way in the front and it would spin to position -145 (test) to fling the thing backward.
+
 
 bool facingNormal = false;
 int firstTurn = -135;
@@ -275,7 +315,7 @@ if(facingNormal){
   lastRun = 551;
 }
 
-  liftMotor5.setPosition(0, degrees);
+  liftMotor5.setPosition(0, degrees);//TO WRITE EXPLANATION FOR[[[[[[[[[[[4-29-2024]]]]]]]]]]]
   liftMotor10.setPosition(0, degrees);
     //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
   driveSpeed(90);
@@ -306,16 +346,14 @@ if(facingNormal){
   liftMotor5.setVelocity(41, percent);
   liftMotor10.setVelocity(41, percent);
 
-  liftMotor5.spinToPosition(131, degrees, false);//if becomes too little switch to 232
-  liftMotor10.spinToPosition(131, degrees, false);
+  moveArm(131);//if becomes too little switch to 232
   wait(1, seconds);
 
   //SPINNY SPINNY//#7 - Swipe the triball to the left from the center to knock the triball out of the match load zone.
   driveSpeed(70);
   turnDrive(spinAround);
   //#8 - Move the arm back into the original position (e.g. 0 degrees on the arm motor).
-  liftMotor5.spinToPosition(0, degrees, false);
-  liftMotor10.spinToPosition(0, degrees, false);//these values need to be changed because the arm isnt supposed to go all the way back up
+  moveArm(0);//these values need to be changed because the arm isnt supposed to go all the way back up
   wait(0.8, seconds);
 
   //RUN AWAY SMOKEY//#9 - Turn every slightly to the left and drive a good distance forward, then turn a bit rightward to account for weird positioning, and push forward the final stretch.
@@ -328,9 +366,7 @@ if(facingNormal){
 wait(0.2, seconds);
 
   //#10 - whack 'em. Move down the arm to touch/hit the barrier at 60% speed.
-liftMotor5.spinToPosition(102, degrees, false);
-  liftMotor10.spinToPosition(102, degrees, false);
-
+  moveArm(102);
 
 }
 
