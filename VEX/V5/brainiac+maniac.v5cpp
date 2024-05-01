@@ -254,7 +254,11 @@ void moveArm(double degree){
     autonomous code are any motors set to 100% velocity.
     Any below 10% will produce a very slow autonomous.
 
-    String type
+    std::string type
+    The 'type' of speed changed inputted by the user determines which motors are going to 
+    be set to the velocity 'speed', preventing different groups of motors from all being
+    changed to a new velocity where changes are not needed, such as a change in the speed
+    of the arm motors resulting in the wheel motors changing speed as well.
 */
 
 //TODO: CHANGE FUNCTION TO HAVE AN ADDITIONAL PARAMETER FOR TYPE, AND A CONDITIONAL TO ALLOW IT TO BE USED FOR 
@@ -317,12 +321,15 @@ void autonomous(void) {/*NOTE: This is the autonomous for the specific Chatswort
   This is occuring because the brain has a mind of its own (pun intended), as the internal counters
   and everything fluctuate due to a variety of factors, such as temperature and battery power. Thus,
   as the power of the battery decreases, any precise autonomous routine will begin to run at a lower
-  performance with increased error. It is always advised to make changes to the code and to test it
-  at full battery, when the the robot and the internal counters will be at optimal performance.
+  performance with increased error. 
+  
+  BEFORE CHANGING YOUR CODE, TEST THE ROBOT AT FULL BATTERY. The brain and internal counters will be
+  at optimal performance. If the errors and irregularities continue, approach hanging the code with
+  caution, and always take backups of the last known functional version to revert to if needs be.
   
   Slight differences in the positioning of the robot, as noted in the important note above the header, 
   can easily result in slight errors snowballing into a non-functional routine. Always ensure a 
-  consistent placement and field.
+  consistent robot placement and matchfield.
 */
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
@@ -381,13 +388,13 @@ if(facingNormal){
 
 
     //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
-  driveSpeed(90);
+  driveSpeed(90, "drive");
   driveLat(963);//drive forward and hit thing into thing
   wait(0.2, seconds);
   //#2 - Move backward to avoid knocking out the triball when turning.
-  driveSpeed(95);
+  driveSpeed(95, "drive");
   driveLat(moveBack);
-  driveSpeed(100);
+  driveSpeed(100, "drive");
   driveLat(firstTurn);//move backward
 
   turnDrive(turnAround);//  -435 = 135 degrees left.  #3 - Turn 135 degrees to position itself to move infront of the match load zone.
@@ -395,25 +402,24 @@ if(facingNormal){
 
 //#4 - Move forward and turn rightward at 85% speed to be directly in front of the match load zone.
   driveLat(263);
-  driveSpeed(85);
+  driveSpeed(85, "drive");
   turnDrive(moveToLoadZone);//junior programmers edit here.
 //#5 - The J.P.S.S.: At drive speed at 60%, drive forward enough to be touching the match load zone barrier.
   //junior programmer's spinny spinny
   wait(0.15, seconds);
-  driveSpeed(60);
+  driveSpeed(60, "drive");
   driveLat(265);
   wait(0.12, seconds);
 
   //#6 - Move arm downward within the match load zone at 40% velocity.
   //ARM DOWN
-  liftMotor5.setVelocity(41, percent);
-  liftMotor10.setVelocity(41, percent);
+  driveSpeed(41, "lift");
 
   moveArm(131);//if becomes too little switch to 232
   wait(1, seconds);
 
   //SPINNY SPINNY//#7 - Swipe the triball to the left from the center to knock the triball out of the match load zone.
-  driveSpeed(70);
+  driveSpeed(70, "drive");
   turnDrive(spinAround);
   //#8 - Move the arm back into the original position (e.g. 0 degrees on the arm motor).
   moveArm(0);//these values need to be changed because the arm isnt supposed to go all the way back up
