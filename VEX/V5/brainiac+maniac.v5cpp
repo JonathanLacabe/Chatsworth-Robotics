@@ -246,24 +246,51 @@ void moveArm(double degree){
 //driveSpeed(double speed)
 //This function sets the velocity of the arm motors or arm motors to be a specific speed.
 
-/*Parameter:
+/*Parameters:
     double speed
     The 'speed' inputted by the user is indicative of a percentage of the maximum possible 
     speed the motors can move. The motors cannot move over 100%, and running the motors 
     at 100% constantly will burn them out very quickly. Only for very brief periods in the
     autonomous code are any motors set to 100% velocity.
     Any below 10% will produce a very slow autonomous.
+
+    String type
 */
 
 //TODO: CHANGE FUNCTION TO HAVE AN ADDITIONAL PARAMETER FOR TYPE, AND A CONDITIONAL TO ALLOW IT TO BE USED FOR 
 //ARM MOTORS AS WELL. CHANGE AUTONOMOUS TO REFLECT THIS.[[[[]]]]
-void driveSpeed(double speed){
-  leftBackMotor2.setVelocity(speed, percent);
-  leftMiddleMotor7.setVelocity(speed, percent);
-  leftFrontMotor9.setVelocity(speed, percent);
-  rightBackMotor4.setVelocity(speed, percent);
-  rightMotor6.setVelocity(speed, percent);
-  rightFrontMotor20.setVelocity(speed, percent);
+void driveSpeed(double speed, std::string type){
+  if(type=="drive"){
+    leftBackMotor2.setVelocity(speed, percent);
+    leftMiddleMotor7.setVelocity(speed, percent);
+    leftFrontMotor9.setVelocity(speed, percent);
+    rightBackMotor4.setVelocity(speed, percent);
+    rightMotor6.setVelocity(speed, percent);
+    rightFrontMotor20.setVelocity(speed, percent);
+  }else if(type=="lift"){
+    liftMotor5.setVelocity(speed, percent);
+    liftMotor10.setVelocity(speed, percent);
+    /*If this function is ever called for something other than "drive" or "lift" (or for 
+    other strings which can be added in the future), then everything that can possibly be
+    done to alert the driver of a malfunction in the program, short of stopping the code
+    altogether, must be done, as seen below:
+    */
+  }else{
+  /*Sets the brain to show as bright red. If visible to the driver, this should immediately
+    be cause for concern.*/
+    Brain.Screen.setFillColor(red);
+    /*A pulse Controller Rumble, additionally alerting the driver of the error if the brain 
+    of the robot is out of sight.*/
+    Controller.rumble("-.-.");
+    /*The for loop below will cause each of the lines within it to be ran 10 times, filling
+    the red brain interface with error messages.*/
+    for(int x =0; x<10; x++){
+      Brain.Screen.print("Error: The driveSpeed function was called improperly.");
+      printf("Error: The driveSpeed function was called improperly.");
+    }
+    
+  }
+  
 }
 
 void preAutonomous(void) {
