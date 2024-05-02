@@ -63,10 +63,10 @@ bool RemoteControlCodeEnabled = true;
 //question the braking system
 // ----------------------------------------------------------------------------
 //                                                                            
-//    Project: VEX V5 Template.                                               
+//    Project: "Omega" - VEX V5 Over Under Robot.                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023 
-//    Most Recent Edit: 4-30-2024 (further documentation, minor changes)
+//    Most Recent Edit: 5-2-2024 (further documentation, minor changes)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
@@ -132,6 +132,12 @@ Omega robot at Chatsworth, so feel free to change them. The naming system of the
 program is done to relate each motor to its port number, making the code more legible from a 
 hardware perspective. If the name were to change, every instance of this motor used in the code 
 would need to be edited to reflect the change.
+
+Does your robot use pneumatics/program account for pneumatics?
+No. As a general rule of thumb, the Chatsworth Robotics Team believes that pneumatics should only
+ever be used where ever every other possible solution has been exhausted. Pneumatics are applicable
+in specific situations where the robot needs to perform a quick linear actuation, in order to push 
+or pull game objects. 
 
 Does this program utilize
 
@@ -338,9 +344,6 @@ void autonomous(void) {/*NOTE: This is the autonomous for the specific Chatswort
   rigorous testing and patching 999999999 errors/slight inconsistencies. Believe in yourself :3
 */  
 
-//READ THIS 1-9-2023
-//FOR THE MATCHLOADING, the arm should be set all the way in the front and it would spin to position -145 (test) to fling the thing backward.
-
 
 bool facingNormal = false;
 int firstTurn = -135;
@@ -385,7 +388,9 @@ if(facingNormal){
   */
   liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
-
+  /*FOR THE MATCHLOADING, the arm should be set all the way in the front and it would spin to 
+    osition -145 (test) to fling the thing backward.
+  */
 
     //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
   driveSpeed(90, "drive");
