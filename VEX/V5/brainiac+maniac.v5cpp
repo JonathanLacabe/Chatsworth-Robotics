@@ -66,13 +66,13 @@ bool RemoteControlCodeEnabled = true;
 //    Project: "Omega" - VEX V5 Over Under Robot.                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023 
-//    Most Recent Edit: 5-2-2024 (further documentation, minor changes)
+//    Most Recent Edit: 5-3-2024 (further documentation, minor changes)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 4-30-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 5-3-2024
 
 
 /*
@@ -267,8 +267,6 @@ void moveArm(double degree){
     of the arm motors resulting in the wheel motors changing speed as well.
 */
 
-//TODO: CHANGE FUNCTION TO HAVE AN ADDITIONAL PARAMETER FOR TYPE, AND A CONDITIONAL TO ALLOW IT TO BE USED FOR 
-//ARM MOTORS AS WELL. CHANGE AUTONOMOUS TO REFLECT THIS.[[[[]]]]
 void driveSpeed(double speed, std::string type){
   if(type=="drive"){
     leftBackMotor2.setVelocity(speed, percent);
@@ -304,7 +302,7 @@ void driveSpeed(double speed, std::string type){
 }
 
 void preAutonomous(void) {
-  //Actions performed when the program starts.
+  //Actions performed when the autonomous program starts.
   Brain.Screen.clearScreen();
   Brain.Screen.print("pre auton code");
   wait(1, seconds);
@@ -315,9 +313,12 @@ void preAutonomous(void) {
   initial position for the robot to start the routine. It is advised to use tools and other on-hand
   pieces to create a consistent placement for the robot and other field objects.
 */
-void autonomous(void) {/*NOTE: This is the autonomous for the specific Chatsworth Robotics Vex V5 robot.
-                         This can be used as the basis for another autonomus program, but for a clean
-                         template for such purposes, see the VEX Template in the VEX folder.*/
+void autonomous(void) {
+/*NOTE: This is the 15-second autonomous for the specific Chatsworth Robotics Vex V5 robot. This can 
+  be used as the basis for another autonomus program, but for a clean template for such purposes, see 
+  the VEX Template in the VEX folder. For the one minute skills autonomous, see the program named 
+  "brainiacSKILLSAUTO" in the github repository in the Vex folder. 
+
 /*
   ~DO NOT GET DISCOURAGED WHEN THE ROBOT PERFORMS SLIGHTLY DIFFERENT ROUTINES WITHOUT CHANGES TO THE CODE:~
 
@@ -344,27 +345,26 @@ void autonomous(void) {/*NOTE: This is the autonomous for the specific Chatswort
   rigorous testing and patching 999999999 errors/slight inconsistencies. Believe in yourself :3
 */  
 
+/*The variables below exist for two important purposes. Firstly, the creation of descriptive 
+variables replace magic numbers in the program, numbers of which the purpose of are only known to 
+the programmer. Removing magic numbers greatly enhances the readability of the program. 
+Secondly, in the game Over Under, which this program was designed for, there are two sides on
+which the robot can be place during the 15 second autonomous period.
 
+readability
+the different side autos.
+*/
 bool facingNormal = false;
 int firstTurn = -135;
 int moveBack = -10;
 int turnAround = -601;
 int moveToLoadZone = -279;//
 int spinAround = 600;
-int secondToLastTurn = -49;
+int secondToLastTurn = 38;
 int finalTurn = 138;
 int lastRun = 561;
 
-if(facingNormal){
-  firstTurn = -135;
-  moveBack = -10;
-  turnAround = -601;
-  moveToLoadZone = -279;
-  spinAround = 600;
-  secondToLastTurn = 38;
-  finalTurn = 138;
-  lastRun = 561;
-}else{
+if(!facingNormal){
   firstTurn = -135;
   moveBack = -30;
   turnAround = 601;
