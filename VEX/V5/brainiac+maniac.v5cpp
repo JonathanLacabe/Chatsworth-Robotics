@@ -66,13 +66,13 @@ bool RemoteControlCodeEnabled = true;
 //    Project: "Omega" - VEX V5 Over Under Robot.                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023 
-//    Most Recent Edit: 5-3-2024 (further documentation, minor changes)
+//    Most Recent Edit: 5-18-2024 (post-AP tests. woop woop)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 5-3-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 5-18-2024
 
 
 /*
@@ -165,8 +165,7 @@ float DEADZONE = 15.0;
 
 //===AUTONOMOUS FUNCTIONS===
 /*The four functions below, driveLat, turnDrive, moveArm, and driveSpeed, are primarily designed
-  to be used in the code for the 15-second autonomous(void) routine.
-  */
+  to be used in the code for the 15-second autonomous(void) routine.*/
 
 //driveLat(double degree)
 //This function moves the robot forward or backward.
@@ -200,7 +199,6 @@ void driveLat(double degree){
   */
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
-0
 
 //turnDrive(double degree)
 //This function turns the robot in a given direction.
@@ -318,17 +316,18 @@ void autonomous(void) {
   be used as the basis for another autonomus program, but for a clean template for such purposes, see 
   the VEX Template in the VEX folder. For the one minute skills autonomous, see the program named 
   "brainiacSKILLSAUTO" in the github repository in the Vex folder. 
+*/
 
 /*
-  ~DO NOT GET DISCOURAGED WHEN THE ROBOT PERFORMS SLIGHTLY DIFFERENT ROUTINES WITHOUT CHANGES TO THE CODE:~
+  ~DO NOT PANIC WHEN THE ROBOT PERFORMS AN ALTERED AUTO ROUTINE WITHOUT CHANGING THE CODE:~
 
   It may occur that on testing changes made to the code the previous day, or even just changing the 
   battery, the autonomous routine of your robot will have changed slightly. This can be frustrating, 
   especially when the code seemed perfected. 
   This is occuring because the brain has a mind of its own (pun intended), as the internal counters
-  and everything fluctuate due to a variety of factors, such as temperature and battery power. Thus,
-  as the power of the battery decreases, any precise autonomous routine will begin to run at a lower
-  performance with increased error. 
+  and mechanisms fluctuate in accuracy and precision due to a variety of factors, such as temperature 
+  and battery power. Thus, as the power of the battery decreases, any autonomous routine will begin to 
+  run with increased error and imprecision. This can greatly affect on routines that rely on precision.
   
   BEFORE CHANGING YOUR CODE, TEST THE ROBOT AT FULL BATTERY. The brain and internal counters will be
   at optimal performance. If the errors and irregularities continue, approach hanging the code with
@@ -338,34 +337,63 @@ void autonomous(void) {
   can easily result in slight errors snowballing into a non-functional routine. Always ensure a 
   consistent robot placement and matchfield.
 */
-  Brain.Screen.clearScreen();
-  Brain.Screen.print("autonomous code");
 
 /*FINAL NOTE: Don't be afraid to use trial and error! The best programs are always created through
   rigorous testing and patching 999999999 errors/slight inconsistencies. Believe in yourself :3
 */  
 
-/*The variables below exist for two important purposes. Firstly, the creation of descriptive 
-variables replace magic numbers in the program, numbers of which the purpose of are only known to 
-the programmer. Removing magic numbers greatly enhances the readability of the program. 
-Secondly, in the game Over Under, which this program was designed for, there are two sides on
-which the robot can be place during the 15 second autonomous period.
+  Brain.Screen.clearScreen();
+  Brain.Screen.print("autonomous code");
 
-readability
-the different side autos.
+
+
+
+/*In the game Over Under, which this program was designed for, there are two sides on which the robot 
+  can be placed during the 15 second and 1 minute autonomous periods. Because of this, the movements 
+  of the auto of one side essentially mirror those of the other, along with slight changes to account 
+  for inconsistencies.
 */
-bool facingNormal = false;
-int firstTurn = -135;
+
+/*
+  The 'facingNear' boolean changes the direction of movements in the autonomous program, based on 
+  whether the robot is using the near or far side auto. If the boolean is set to true, then the 
+  movement variables below (which are already set to their near side values) will not be changed by 
+  the 'if(!facingNear)' conditional.
+  This boolean will have to be changed the programmer every time a change is needed. In the future, a 
+  interface on the screen of the brain should be added for the driver to decide which side auto will run,
+  instead of the current laborious process of having to update the code on a computer and then port the 
+  code back to the robot. [[[[[in future, add reference to project that has this]]]]]
+*/
+bool facingNear = false;
+
+/*Below are the movement variables. These variables exist for two important purposes. 
+  
+  Firstly, the creation of descriptive variables for replace magic numbers in the program. Magic 
+  numbers are values in the program of which the purpose and meaning of are known only to the 
+  programmer, and replacing them with descriptive variables greatly enhances program readability. 
+  
+  Secondly, since these variables control key movements and turns within the autonomous, then they can 
+  be used to switch the program to the near side or far side routine, as the only difference between
+  them is the direction of the movements. See the conditional below for further explanation.
+*/
+int firstTurn = -135; //This variable remains the same in both the far and near side auto.
 int moveBack = -10;
 int turnAround = -601;
-int moveToLoadZone = -279;//
+int moveToLoadZone = -279;
 int spinAround = 600;
 int secondToLastTurn = 38;
 int finalTurn = 138;
 int lastRun = 561;
 
-if(!facingNormal){
-  firstTurn = -135;
+/*This conditional changes all of the movement variables to their equivalent far side routine values. The 
+  conditional runs if the facingNear boolean is set to be false, and otherwise the original integer 
+  declarations are preserved.
+  Since the far side autonomous mirrors the near side, all of the variables must have their signs flipped 
+  and changes/corrections made to account for slight differences in the far side's functionality. This can 
+  be seen below in how the moveToLoadZone variable is negative for the near side auto but positive and 
+  slightly changed for the far side auto.
+*/
+if(!facingNear){
   moveBack = -30;
   turnAround = 601;
   moveToLoadZone = 286;
@@ -374,6 +402,8 @@ if(!facingNormal){
   finalTurn = -105;
   lastRun = 551;
 }
+
+
   /*In order to faciliate matchloading, and to make the rest of the code moving the arm function
     (such as the AWP, obtained by touching the horizontal elevation bar with the arm at the end of 
     the routine), the built-in motor encoder is utilized to make the program remember the initial 
@@ -389,7 +419,7 @@ if(!facingNormal){
   liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
   /*FOR THE MATCHLOADING, the arm should be set all the way in the front and it would spin to 
-    osition -145 (test) to fling the thing backward.
+    position -145 (test) to fling the thing backward.
   */
 
     //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
