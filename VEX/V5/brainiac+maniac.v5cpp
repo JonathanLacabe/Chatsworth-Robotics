@@ -143,6 +143,9 @@ Motor Encoder:
 
 Motor Groups:
 
+brakeType:
+
+
 
 
 ===FAQ===
@@ -159,11 +162,11 @@ held in place, useful when grabbing a triball or other actions requiring exact p
 
 Why aren't the motor encoders used to prevent the arm from hitting the ground?
 This was an initial task that was worked on for some weeks, with some untested code having already 
-been written (the comments visible in older commits). Once it was discovered that the ability of 
-the robot to lift itself off of the ground using the arm was useful for a variety of purposes, we 
-shelved this plan. The idea may be revisited in future robots/designs, however.
-Because the motor encoder is not used, the arm can push the robot upward from the ground or from the 
-elevation bar (in the game Over Under) to achieve an elevated position.
+been written (the comments visible in the armControl() function of older commits). Once it was 
+discovered that the ability of the robot to lift itself off of the ground using the arm was useful 
+for a variety of purposes, we shelved this plan. The idea may be revisited in future robots/designs, 
+however. Because the motor encoder is not used, the arm can push the robot upward from the ground or 
+from the elevation bar (in the game Over Under) to achieve an elevated position.
 
 How do I add/change devices (motors, motor groups, controllers)? 
 To add a motor, click the motor icon in the right of the blue area below the taskbar (the leftmost
@@ -559,36 +562,72 @@ if(!facingNear){
 
 
 /*lift*/
-    
-void armControl(bool upIn, bool downIn){
- //if(upIn & /*motor.encoder.position > 0*/){}
+//armControl(bool upIn, bool downIn)
+//This function moves the arm up and down according to controller inputs.
 
-//if down && motor.encoder.position <140{}
-  if(upIn){///     && (liftMotor10.position(degrees) < 140.0) && (liftMotor5.position(degrees) < 140.0)
-  //ToDo: this NEEDS TO BE CHANGED, THE ENCODER CODE CAN BE IMPROVED
-  //for the encoder, these should be changed to be spinFor of
-  //a specific variable distance:
-  //int degree = //figure out degree based on auto
-    //while degree< some numbrar{}
-        printf("VEXcode");
-        liftMotor5.spin(forward, 50, percent);
-        liftMotor10.spin(forward, 50, percent);
-      
-    }else if(downIn){//while degree> smaller numbrar[]
-    //I would believe
-      liftMotor5.spin(reverse, 50, percent);
-      liftMotor10.spin(reverse, 50, percent);
-    }else{
-      liftMotor5.stop(brakeType::hold);
-      liftMotor10.stop(brakeType::hold);
-    }
+/*Parameter:
+    bool upIn
+    The boolean reflecting whether button R2 on the controller is being pressed or not, as determined
+    continously by the userControl().
+    If R2 is being pressed and the boolean is true, the arm will move forward.
+
+    bool downIn
+    The boolean reflecting whether button R1 on the controller is being pressed or not, as determined
+    continously by the userControl().
+    If R1 is being pressed and the boolean is true, the arm will move backward.
+*/
+void armControl(bool upIn, bool downIn){
+  /*Initially, this function was intended to utilize the encoders of the lift motors to prevent the arm 
+    from hitting the ground. However, after this was shelved after the ability to elevator was discovered
+    and for other reasons detailed in the FAQ. The code intended for this purpose never advanced beyond 
+    some untested theorycode, which can be found in earlier commits of this code in the Github repository.
+  */
+  /*The code below does not utilize the moveArm function as it was the intention of the programmer to
+    keep the functions used for the movement of the robot itself totally self-contained, especially
+    considering that the moveArm function is one of the auton-specific functions.
+    Apart from that, the code is as simple as possible. The speed at which the motors move as the buttons
+    are being held was adjusted several times, 50% being a good middle ground after seeing how fast 90% was.
+  */
+  if(upIn){
+    //printf("VEXcode");//Prior to competitions, this line led to "VEXcode" being spammed to the console 
+                        //every time R2 was held. No longer.
+    liftMotor5.spin(forward, 50, percent);
+    liftMotor10.spin(forward, 50, percent);
+  }else if(downIn){
+    liftMotor5.spin(reverse, 50, percent);
+    liftMotor10.spin(reverse, 50, percent);
+  }else{
+  /*If neither the R2 nor R1 buttons are being held down, then the arm will be held in place according to
+    the brakeType hold. Since the armControl is being called every tick that the robot is running, then this
+    conditional will run true the bulk of the time that the robot is being used. Holding the arm in place
+    takes significant motor power considering the weight of the arm, and so this function is taking 
+    advantage of the two-motor arm system, which provides well enough strength for this task.
+  */
+    liftMotor5.stop(brakeType::hold);
+    liftMotor10.stop(brakeType::hold);
+  }
 
 }
 
+
+/* drive*///[[[[[[[[[[[[[[]]]]]]]]]]]]]]
+//motorControl(float leftIn, float rightIn)
+//This function moves the arm up and down according to controller actions.
+
+/*Parameter:
+    bool upIn
+    The boolean reflecting whether button R2 on the controller is being pressed or not, as determined
+    continously by the userControl().
+    If R2 is being pressed and the boolean is true, the arm will move forward.
+
+    bool downIn
+    The boolean reflecting whether button R1 on the controller is being pressed or not, as determined
+    continously by the userControl().
+    If R1 is being pressed and the boolean is true, the arm will move backward.
+*/
 void motorControl(float leftIn, float rightIn){
-  /* drive*/
-  //left drive
-leftFrontMotor9.spin(forward, leftIn, percent);
+    //left drive
+    leftFrontMotor9.spin(forward, leftIn, percent);
     leftMiddleMotor7.spin(forward, leftIn, percent);
     leftBackMotor2.spin(forward, leftIn, percent);
     
@@ -598,11 +637,28 @@ leftFrontMotor9.spin(forward, leftIn, percent);
     rightBackMotor4.spin(forward, rightIn, percent);
 }
 
-//drivecontrol
 
+
+//driveControl(float fwdIn, float turnIn)
+//This function moves the robot in whichever direction based on controller inputs.
+
+/*Parameter:
+    float fwdIn
+    This float value reflects the position of the first Joystick of the user, 100.0 being moved all
+    the way upward while -100.0 being moved all the way down. The value is only representative of
+    the vertical position of the joystick.
+
+    float turnIn
+    This float value reflects the position of the second Joystick of the user, 100.0 being moved all
+    the way upward while -100.0 being moved all the way down. The value is only representative of
+    the vertical position of the joystick.
+*/
 void driveControl(float fwdIn, float turnIn) {
-  Brain.Screen.clearScreen();
-  // place driver control in this while loop, so it runs infinitely until something tells it to do someting else
+  //Brain.Screen.clearScreen();//By clearing the screen with every movement, console.logs would never show.
+  
+  /*These two values are the modified versions of the fwdIn and turnIn values, representing the total
+    amount left or right the robot is meant to move, with direction factored in as well.
+  */
   float fwdVal;
   float turnVal;
   if(fabs(fwdIn) > DEADZONE){
@@ -626,6 +682,7 @@ void userControl() {
 liftMotor5.setPosition(0, degrees);
 liftMotor10.setPosition(0, degrees);
     
+    //This while loop runs infinitely, considering no break calls are made throughout the entire program.
     while (true) {
     ///
     driveControl(Controller1.Axis3.position(), Controller1.Axis1.position());//The joysticks, which return a value from -100 to 100 depending on upward/downward positioning
