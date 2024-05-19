@@ -98,6 +98,53 @@ d8'          `8b  `8'        88        88
 
 
 /*
+
+[[[ALPHABETIZE]]][[[[[COMPLETE DEFINTITIONS]]]]]
+==DICTIONARY==
+{Terms defined by coach Sam F.}
+This dictionary is relevant to terms that are frequently used within this program's documentation.
+For additional Vex-specific terms to be defined, see here:
+https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
+For general robotics/engineering-related terms, see here:
+https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
+
+-Omega:
+  A Chatsworth High School V5 robot, the code for which you are currently viewing.
+
+-Tank Drive:
+
+-Motor Cartridges:
+  [green, red, blue]
+
+Over Under:
+  The 
+
+Autonomous Routine:
+
+Auton/Auto:
+  see "Autonomous Routine".
+
+Port/Port Number:
+
+Pneumatics:
+
+Sequentialization:
+  [[[the principle and how it is used in the drivelat]]]
+
+Matchloading:
+
+
+A.W.P. (Autonomous Win Point):
+
+Rule F1:
+  The most important rule in Vex, FRC, and all of Robotics.
+
+Motor Encoder:
+
+Motor Groups:
+
+
+
 ===FAQ===
 
 What drive control does this program use?
@@ -139,12 +186,16 @@ ever be used where ever every other possible solution has been exhausted. Pneuma
 in specific situations where the robot needs to perform a quick linear actuation, in order to push 
 or pull game objects. 
 
-Does this program utilize
+Does this program utilize PID, odometry, or custom motion algorithms?
+No. We are intending to use PID algorithms for our FRQ robot to automatically position a turret 
+toward a goal in shooting games, but we are yet to add PID algorithms to a V5 bot. 
+[[update with more detail when FRC is done, or if PID is used for omicron]]
 
 
 
 
 */
+
 
 
 //pivot buttons
@@ -255,7 +306,7 @@ void moveArm(double degree){
     The 'speed' inputted by the user is indicative of a percentage of the maximum possible 
     speed the motors can move. The motors cannot move over 100%, and running the motors 
     at 100% constantly will burn them out very quickly. Only for very brief periods in the
-    autonomous code are any motors set to 100% velocity.
+    autonomous routine are any motors set to 100% velocity.
     Any below 10% will produce a very slow autonomous.
 
     std::string type
@@ -307,7 +358,7 @@ void preAutonomous(void) {
 }
 
 
-/*IMPORTANT NOTE: When establishing an autonomous routine, make sure to create an exact, replicatable
+/*IMPORTANT NOTE: When establishing an autonomous routine, make sure to create an exact, replicable
   initial position for the robot to start the routine. It is advised to use tools and other on-hand
   pieces to create a consistent placement for the robot and other field objects.
 */
@@ -330,7 +381,7 @@ void autonomous(void) {
   run with increased error and imprecision. This can greatly affect on routines that rely on precision.
   
   BEFORE CHANGING YOUR CODE, TEST THE ROBOT AT FULL BATTERY. The brain and internal counters will be
-  at optimal performance. If the errors and irregularities continue, approach hanging the code with
+  at optimal performance. If the errors and irregularities continue, approach changing the code with
   caution, and always take backups of the last known functional version to revert to if needs be.
   
   Slight differences in the positioning of the robot, as noted in the important note above the header, 
@@ -404,17 +455,18 @@ if(!facingNear){
 }
 
 
-  /*In order to faciliate matchloading, and to make the rest of the code moving the arm function
-    (such as the AWP, obtained by touching the horizontal elevation bar with the arm at the end of 
-    the routine), the built-in motor encoder is utilized to make the program remember the initial 
-    position of the liftMotors, e.g. the position that the arm is moved to before autonomous is
-    started. Because of this, it is imperative that the arm is always moved into the same position 
-    before starting, and that all of the code is based off of this initial position. This same
-    logic can be used in an algorithm used for preventing the robot arm from touching the ground,
-    as noted in the FAQ.
+
+
+  /*In order to faciliate matchloading, and to make the arm movement code (such as the AWP, obtained by 
+    touching the horizontal elevation bar with the arm at the end of the routine) function, the built-in 
+    motor encoder is utilized to retain the initial position of the lift motors in the program memory, e.g. 
+    storing the position that the arm is moved to before autonomous is started. Because of this, it is 
+    imperative that the arm is always moved into the same position before starting, and that the rest of 
+    the program is based off of this initial position. This same logic can be used in an algorithm used for
+    preventing the robot arm from touching the ground, as noted in the FAQ.
     As the first position of the arm (which, for the Chatsworth Vex V5 Omega robot, entails pushing
     the arm as far backward as possible) is the base position for all other positions, this 
-    position is rendered as zero in the code.
+    position is set to be zero below.
   */
   liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
