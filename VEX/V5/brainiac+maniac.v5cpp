@@ -151,7 +151,7 @@ Motor Groups:
 brakeType:
 
 Deadzone:
-  The space less than or equal to 10 degrees away from the center of a joystick, where the joystick
+  The space less than or equal to 15 units away from the center of a joystick, where the joystick
   will oftentimes remain off-centered, leading to the robot moving very slowly without use of the
   controller. To prevent this, a block for all inputs from the joystick within the deadzone area
   must be created, seen in the driveControl function.
@@ -220,7 +220,7 @@ toward a goal in shooting games, but we are yet to add PID algorithms to a V5 bo
 using namespace vex;
 
 /*This variable is meant to account for what the joystick is released by the driver, leaving it 
-slightly off-center. See the driveControl function for usage.*/
+  slightly off-center. See the driveControl function for usage.*/
 float DEADZONE = 15.0;
 
 // Begin project code
@@ -709,7 +709,7 @@ void driveControl(float fwdIn, float turnIn) {
   */
   float fwdVal;
   float turnVal;
-  /*With the deadzone (the global final integer that was set to be 10), if the absolute value of the 
+  /*With the deadzone (the global final integer that was set to be 15), if the absolute value of the 
     fwdIn value (which is for the first joystick and represents forward and backward movement) is 
     lesser than the deadzone, that means that the joystick is too close to the center of the joystick 
     to warrant any movement, and to prevent the robot moving by itself by a slightly off-center 
@@ -721,7 +721,7 @@ void driveControl(float fwdIn, float turnIn) {
       fwdVal = 0;
   }
   /*The same process that was done for the fwdIn is now down for the turnVal, with it only being 
-    allowed to be used for movement if the joystick is farther than ten degrees from the center. 
+    allowed to be used for movement if the joystick is farther than 15 units from the center. 
   */
   if(fabs(turnIn)> DEADZONE){
     turnVal = turnIn;
