@@ -9,5 +9,5 @@ your own code.\
 -Add link to Chatsworth Library Robotics\
 -Add additional information for cloning and deploying the code\
 -Add read me for the FRC program\
--Complete Documentation and Template
+-Complete Documentation and Template\
 -Video tutorials?\
