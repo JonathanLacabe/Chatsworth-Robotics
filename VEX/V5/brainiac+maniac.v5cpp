@@ -101,7 +101,7 @@ d8'          `8b  `8'        88        88
 
 /*
 
-[[[ALPHABETIZE]]]
+
 ==DICTIONARY==
 {Terms defined by coach Sam F.}
 
@@ -112,26 +112,14 @@ For general robotics/engineering-related terms, see here:
 https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
 
 
--Omega:
-  A Chatsworth High School V5 robot, the code for which you are currently viewing.
+-Arcade Drive:
+  A control style in which one joystick is used for moving/strafing movement (forward & 
+  backward), and the second joystick is used for directional movement, turning left or right. 
+  This is the control style used by this program, as demonstrated in the movement functions at 
+  the bottom. 
 
--Tank Drive:
-  A control style that has individually controlled two sets of motors (the left and right wheels 
-  of the robot) using the joysticks or another mechanism on the controller, with one joystick 
-  controlling the left motors and the other controlling the right motors. Thus, pushing the 
-  joysticks all the way forward or backward would make the robot move straight forward or backward 
-  without turning. 
-  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
-  where extra maneuverability is not a factor. 
-
--Motor Cartridges:
-  Different gear amounts/ratios in the motors, which gives them different numbers of revolutions 
-  per minute. Green is the default, with an even amount of torque and speed. Red cartridges prefer 
-  high torque, with stronger motors but reduced speed. Blue cartridges are high speed, with weaker 
-  motors that run a lot faster. 
-
--Over Under:
-  The 2023-2024 season of Vex V5 robotics.
+-Auton/Auto:
+  see "Autonomous Routine".
 
 -Autonomous Routine:
   The first 15 seconds of the match in which there is no driver input or input from the 
@@ -142,60 +130,9 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   amount of points that they can obtain using a pre-programmed specialized skills script. This is 
   separate from the user matches, in which the driver controls the robot during the time period. 
 
--Arcade Drive:
-  A control style in which one joystick is used for moving/strafing movement (forward & 
-  backward), and the second joystick is used for directional movement, turning left or right. 
-  This is the control style used by this program, as demonstrated in the movement functions at 
-  the bottom. 
-
--Auton/Auto:
-  see "Autonomous Routine".
-
--Port/Port Number:
-  The spots on the brain where components such as motors, sensors, radio, etc. can be plugged 
-  in for use in programming. It is a good naming rule to include the port number of a specific 
-  component in the name of the component as used in the code, as demonstrated in the motors of 
-  this program.
-
--Pneumatics:
-  Air-pressure powered activators, where compressed air kept in tanks provides an added boost 
-  to a robot action faster and greater than can be done by a motor. Pneumatics are applicable 
-  in specific situations where the robot needs to perform a quick linear actuation, in order 
-  to push or pull game objects. 
-
--Sequentialization:
-  A general rule of programming where lines of code run top-to-bottom, maintained during all 
-  programming events except for special circumstances. The program will always wait until one 
-  line has finished for the next one to run. In Vexcode (as inother languages), this can be 
-  circumvented in functions such as spinFor through the addition of 'false' argument at the end 
-  of the function call, which will cause the next line to run concurrent to the previous. This 
-  is useful in a variety of circumstances, one instance described in the driveLat function. 
-
--Matchloading:
-  General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
-  for example, in the 2024-2025 game "High Stakes", there is no matchloading whatsoever.
-
--Preloading
-  Gameobjects that start on or touching the robot. The Omega bot begins in autonomous with a 
-  preloaded triball in front, scoring the first point using it. See the auto documentation for 
-  more detail.
-
 -A.W.P. (Autonomous Win Point):
   A point obtainable through certain objectives in auto, worth half of one win, used in ranking 
   calculations.
-
--Rule F1:
-  The most important rule in Vex, FRC, and all of Robotics.
-
--Motor Encoder:
-  An integrated encoder. These are sensors that determine the position of the shaft of the motor
-  at any time, showing past movement and being useful for relative positioning, as used in the 
-  autonomous routine and the userControl() function.
-
--Motor Groups:
-  A selection in the code where multiple motors are given the same value, such as when multiple
-  motors need to act the same. A motor group would have been preferrable to use for the left and 
-  right motors of the drivebase, but this was not done for reasons outlined in the FAQ.
 
 -brakeType:
   A type that defines how the motor will act when you tell it to stop. There are three main 
@@ -212,6 +149,72 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   will oftentimes remain off-centered, leading to the robot moving very slowly without use of the
   controller. To prevent this, a block for all inputs from the joystick within the deadzone area
   must be created, seen in the driveControl function.
+
+-Matchloading:
+  General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
+  for example, in the 2024-2025 game "High Stakes", there is no matchloading whatsoever.
+
+-Motor Cartridges:
+  Different gear amounts/ratios in the motors, which gives them different numbers of revolutions 
+  per minute. Green is the default, with an even amount of torque and speed. Red cartridges prefer 
+  high torque, with stronger motors but reduced speed. Blue cartridges are high speed, with weaker 
+  motors that run a lot faster. 
+
+-Motor Encoder:
+  An integrated encoder. These are sensors that determine the position of the shaft of the motor
+  at any time, showing past movement and being useful for relative positioning, as used in the 
+  autonomous routine and the userControl() function.
+
+-Motor Groups:
+  A selection in the code where multiple motors are given the same value, such as when multiple
+  motors need to act the same. A motor group would have been preferrable to use for the left and 
+  right motors of the drivebase, but this was not done for reasons outlined in the FAQ.
+
+-Omega:
+  A Chatsworth High School V5 robot, the code for which you are currently viewing.
+
+-Tank Drive:
+  A control style that has individually controlled two sets of motors (the left and right wheels 
+  of the robot) using the joysticks or another mechanism on the controller, with one joystick 
+  controlling the left motors and the other controlling the right motors. Thus, pushing the 
+  joysticks all the way forward or backward would make the robot move straight forward or backward 
+  without turning. 
+  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
+  where extra maneuverability is not a factor. 
+
+-Over Under:
+  The 2023-2024 season of Vex V5 robotics.
+
+-Pneumatics:
+  Air-pressure powered activators, where compressed air kept in tanks provides an added boost 
+  to a robot action faster and greater than can be done by a motor. Pneumatics are applicable 
+  in specific situations where the robot needs to perform a quick linear actuation, in order 
+  to push or pull game objects. 
+
+-Port/Port Number:
+  The spots on the brain where components such as motors, sensors, radio, etc. can be plugged 
+  in for use in programming. It is a good naming rule to include the port number of a specific 
+  component in the name of the component as used in the code, as demonstrated in the motors of 
+  this program.
+
+-Preloading
+  Gameobjects that start on or touching the robot. The Omega bot begins in autonomous with a 
+  preloaded triball in front, scoring the first point using it. See the auto documentation for 
+  more detail.
+
+-Rule F1:
+  The most important rule in Vex, FRC, and all of Robotics.
+
+-Sequentialization:
+  A general rule of programming where lines of code run top-to-bottom, maintained during all 
+  programming events except for special circumstances. The program will always wait until one 
+  line has finished for the next one to run. In Vexcode (as inother languages), this can be 
+  circumvented in functions such as spinFor through the addition of 'false' argument at the end 
+  of the function call, which will cause the next line to run concurrent to the previous. This 
+  is useful in a variety of circumstances, one instance described in the driveLat function. 
+
+
+
 
 
 
