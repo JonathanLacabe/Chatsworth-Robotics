@@ -29,7 +29,7 @@ brain Brain;
 // Robot configuration code.
 motor rightBackMotor4 = motor(PORT4, ratio18_1, true);
 
-motor rightMotor6 = motor(PORT6, ratio18_1, true);
+motor rightMiddleMotor6 = motor(PORT6, ratio18_1, true);
 
 motor rightFrontMotor20 = motor(PORT20, ratio18_1, true);
 
@@ -77,11 +77,20 @@ This is the VEX V5 Template, optimized with some simple starter functions to ass
 creating their first program. For additional help, see the VeX V5 Directory page for more guides
 and tools. [[[[[[[not yet completed]]]]]]]
 
+As a generic template, this program uses a six-motor drivebase and two lift motors, as an example 
+to rookie robotics team for how they may structure their robot. 
+When copying in this file from Github into an IDE such as VEXCode V5, then you will have to add 
+the eight motors and the controller into the devices screen, as detailed in the FAQ (see the 
+question "How do I add/change devices (motors, motor groups, controllers)?").
+If you use an IDE such as VSCode, then there should be no issue, as the motors only need to be
+copy-and-pasted in to function.
 
+If you want to see a fully documented script and autonomous routine that was actually used for
+V5 competitions, see the file 'brainiac+maniac.v5cpp' (found in the V5 folder of the repository).
 
-To understand terms often used in the Vex world, see here:
+To understand terms often used in the Vex world, go here:
 https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
-For general robotics/engineering-related terms, see here:
+For general robotics/engineering-related terms, go here:
 https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
 
 
@@ -185,7 +194,7 @@ void driveLat(double degree){
   leftMiddleMotor7.spinFor(forward, degree, degrees, false);
   leftFrontMotor9.spinFor(forward, degree, degrees, false);
   rightBackMotor4.spinFor(forward, degree, degrees, false);
-  rightMotor6.spinFor(forward, degree, degrees, false);
+  rightMiddleMotor6.spinFor(forward, degree, degrees, false);
   /*The final line of each of the four functions does not have the ending false argument, as it will 
     cause the program to actually run the code instead of skipping over everything. If the argument 
     is set to false, then none of the code called in the function will run when used  except for its 
@@ -210,7 +219,7 @@ void turnDrive(double degree){
   leftMiddleMotor7.spinFor(reverse, degree, degrees, false);
   leftFrontMotor9.spinFor(reverse, degree, degrees, false);
   rightBackMotor4.spinFor(forward, degree, degrees, false);
-  rightMotor6.spinFor(forward, degree, degrees, false);
+  rightMiddleMotor6.spinFor(forward, degree, degrees, false);
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
 
@@ -269,7 +278,7 @@ void driveSpeed(double speed, std::string type){
     leftMiddleMotor7.setVelocity(speed, percent);
     leftFrontMotor9.setVelocity(speed, percent);
     rightBackMotor4.setVelocity(speed, percent);
-    rightMotor6.setVelocity(speed, percent);
+    rightMiddleMotor6.setVelocity(speed, percent);
     rightFrontMotor20.setVelocity(speed, percent);
   }else if(type=="lift"){
     liftMotor5.setVelocity(speed, percent);
@@ -347,34 +356,17 @@ void preAutonomous(void) {
   wait(1, seconds);
 }
 
-/*NOTE: This is the 15-second autonomous for the specific Chatsworth Robotics Vex V5 robot. This can 
-  be used as the basis for another autonomous program, but for a clean template for such purposes, 
-  see the VEX Template in the VEX folder. For the one-minute skills autonomous, see the program named 
-  "brainiacSKILLSAUTO" in the Github repository in the Vex folder. 
-*/
 void autonomous(void) {
-/*In the game Over Under, which this program was designed for, there are two sides on which the robot 
-  can be placed during the 15 second and 1 minute autonomous periods. Because of this, the movements 
-  of the auto of one side essentially mirror those of the other, along with slight changes to account 
-  for inconsistencies.
-*/
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
+/* Whatever game you may be creating a robot for may have two different sides for an autonomous to 
+   begin from, as was done in the Over Under game. If this is the case, reference the boolean system 
+   in the beginning of the autonomous function of the file 'brainiac+maniac.v5cpp' (found in the V5 
+   folder of the repository), where a single boolean is used to change the entirety of an auto 
+   routine from being a far-side auto into a near-side auto, using only variables and a conditional. 
+*/
 
 /*
-  The 'facingNear' boolean changes the direction of movements in the autonomous program, based on 
-  whether the robot is using the near or far side auto. If the boolean is set to true, then the 
-  movement variables below (which are already set to their near side values) will not be changed by 
-  the 'if(!facingNear)' conditional.
-  This boolean will have to be changed the programmer every time a change is needed. In the future, 
-  a interface on the screen of the brain should be added for the driver to decide which side auto 
-  will run, instead of the current laborious process of having to update the code on a computer and 
-  then port the code back to the robot. [[[[[in future, add reference to project that has this]]]]]
-*/
-bool facingNear = false;
-
-/*Below are the movement variables. These variables exist for two important purposes. 
-  
   Firstly, the creation of descriptive variables for replace magic numbers in the program. Magic 
   numbers are values in the program of which the purpose and meaning of are known only to the 
   programmer, and replacing them with descriptive variables greatly enhances program readability. 
@@ -383,32 +375,7 @@ bool facingNear = false;
   can be used to switch the program to the near side or far side routine, as the only difference 
   between them is the direction of the movements. See the conditional below for further explanation.
 */
-int firstTurn = -135; //This variable remains the same in both the far and near side auto.
-int moveBack = -10;
-int turnAround = -601;
-int moveToLoadZone = -279;
-int spinAround = 600;
-int secondToLastTurn = 38;
-int finalTurn = 138;
-int lastRun = 561;
 
-/*This conditional changes all of the movement variables to their equivalent far side routine values. 
-  The conditional runs if the facingNear boolean is set to be false, and otherwise the original 
-  integer declarations are preserved.
-  Since the far side autonomous mirrors the near side, all of the variables must have their signs 
-  flipped and changes/corrections made to account for slight differences in the far side's 
-  functionality. This can be seen below in how the moveToLoadZone variable is negative for the near 
-  side auto but positive and slightly changed for the far side auto.
-*/
-if(!facingNear){
-  moveBack = -30;
-  turnAround = 601;
-  moveToLoadZone = 286;
-  spinAround = -600;
-  secondToLastTurn = 35;
-  finalTurn = -105;
-  lastRun = 551;
-}
 
 
 
@@ -437,10 +404,15 @@ if(!facingNear){
 
 
   //ACTUAL AUTONOMOUS ROUTINE. 
-  /*If you would like to understand the field of the Over Under game and the path of which the the 
-    robot takes through the autonomous routine, then look at the 'OverUnderAutonomous.png' file in 
-    the V5 folder of the Github repository.
+
+
+  /*In order to create an autonomous routine, it is advised to research the rules and limitations of your
+
+
+  [[[talk about 1 minute auto, talk about mapping, take references from the robotics journal]]]
   */
+
+//  [[for the actual auto thing, just include a few lines referencing the important function calls and how they are used.]]
 
 
 
@@ -607,7 +579,7 @@ void motorControl(float leftIn, float rightIn){
     
     //Right drive
     rightFrontMotor20.spin(forward, rightIn, percent);
-    rightMotor6.spin(forward, rightIn, percent);
+    rightMiddleMotor6.spin(forward, rightIn, percent);
     rightBackMotor4.spin(forward, rightIn, percent);
 }
 
