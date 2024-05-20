@@ -150,6 +150,12 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   controller. To prevent this, a block for all inputs from the joystick within the deadzone area
   must be created, seen in the driveControl function.
 
+-Far/Near Side Auto:
+  In the game Over Under, which this program was designed for, there are two sides on which the 
+  robot can be placed during the 15 second and 1 minute autonomous periods. Because of this, the 
+  movements of the auto of one side essentially mirror those of the other, along with slight changes 
+  to account for inconsistencies.
+
 -Matchloading:
   General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
   for example, in the 2024-2025 game "High Stakes", there is no matchloading whatsoever.
@@ -483,11 +489,6 @@ void preAutonomous(void) {
   "brainiacSKILLSAUTO" in the Github repository in the Vex folder. 
 */
 void autonomous(void) {
-/*In the game Over Under, which this program was designed for, there are two sides on which the robot 
-  can be placed during the 15 second and 1 minute autonomous periods. Because of this, the movements 
-  of the auto of one side essentially mirror those of the other, along with slight changes to account 
-  for inconsistencies.
-*/
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
 
@@ -496,10 +497,10 @@ void autonomous(void) {
   whether the robot is using the near or far side auto. If the boolean is set to true, then the 
   movement variables below (which are already set to their near side values) will not be changed by 
   the 'if(!facingNear)' conditional.
-  This boolean will have to be changed the programmer every time a change is needed. In the future, 
-  a interface on the screen of the brain should be added for the driver to decide which side auto 
-  will run, instead of the current laborious process of having to update the code on a computer and 
-  then port the code back to the robot. [[[[[in future, add reference to project that has this]]]]]
+  This boolean will have to be changed by the programmer every time a change is needed. In the 
+  future, a interface on the screen of the brain should be added for the driver to decide which side 
+  auto will run, instead of the current laborious process of having to update the code on a computer 
+  and then port the code back to the robot. [[[[[in future, add reference to project that has this]]]]]
 */
 bool facingNear = false;
 
@@ -542,26 +543,27 @@ if(!facingNear){
 
 
 
-  /*In order to faciliate preloading and to make the arm movement code function, the built-in motor 
-    encoder is utilized to retain the initial position of the lift motors in the program memory, e.g. 
-    storing the position that the arm is moved to before autonomous is started. 
+/*In order to faciliate preloading and to make the arm movement code function, the built-in motor 
+  encoder is utilized to retain the initial position of the lift motors in the program memory, e.g. 
+  storing the position that the arm is moved to before autonomous is started. 
 
-    As the first position of the arm is the base position for all other positions, this position is 
-    set to be zero below. Because of how the moveArm function works, any argument greater than the 
-    current position (in degrees) of the arm will move it forward, while any argument lesser than the 
-    current position will move the arm toward the starting position.
+  As the first position of the arm is the base position for all other positions, this position is 
+  set to be zero below. Because of how the moveArm function works, any argument greater than the 
+  current position (in degrees) of the arm will move it forward, while any argument lesser than the 
+  current position will move the arm toward the starting position.
 
-    It is IMPERATIVE that the arm is always moved into the same position before starting, and that 
-    the rest of the program is based off of this initial position. This same logic can be used in an 
-    algorithm used for preventing the robot arm from touching the ground, as noted in the FAQ. 
-    The motor encoder is useful for arm movements such as the AWP (Autonomous Win Point), obtained by 
-    touching the horizontal elevation bar with the arm at the end of the routine.
-  */
+  It is IMPERATIVE that the arm is always moved into the same position before starting, and that 
+  the rest of the program is based off of this initial position. This same logic can be used in an 
+  algorithm used for preventing the robot arm from touching the ground, as noted in the FAQ. 
+  The motor encoder is useful for arm movements such as the AWP (Autonomous Win Point), obtained by 
+  touching the horizontal elevation bar with the arm at the end of the routine.
+*/
   liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
-  /*FOR THE PRELOADING/INITIAL POSITION OF OMEGA: The arm should be set as far back inward as 
-    possible (away from the ground).
-  */
+
+/*FOR THE PRELOADING/INITIAL POSITION OF OMEGA: The arm should be set as far back inward as 
+  possible (away from the ground).
+*/
 
 
 
