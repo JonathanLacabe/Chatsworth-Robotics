@@ -99,8 +99,8 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 
 ===FAQ===
 
-What drive control does this program use?
-This program uses tank drive control as per recommendation of the team coach, Sam F.
+What drive control does this template use?
+This template utilizes tank drive control.
 
 What motors does this program utilize?
 Though utilizing no motor groups (though it may in the future, specifically for the lift motors),
@@ -478,7 +478,7 @@ void autonomous(void) {
 
 
 
-//===MOVEMENTS FUNCTIONS===
+//===MOVEMENT FUNCTIONS===
 /*The three functions below, armControl, motorControl, and driveControl, are primarily designed for 
   use in the userControl function, which continously takes in input from the controller and allow the 
   robot and arm to move. The functions work for the lift, drive, and for the drive algorithm 
