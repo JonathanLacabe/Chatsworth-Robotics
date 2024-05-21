@@ -284,7 +284,8 @@ Why doesn't this program utilize motor groups?
 Originally, it was the belief of the programmer that the motors would have to be individualized 
 for specific purposes that were later cut (and forgotten). For this reason, motor groups were not
 used and it would be only later on that it was realized that this program is a perfect example of
-a scenario in which they would be used. 
+a scenario in which they would be used. To see how motor groups would be used, look in the Vex
+Template in the Vex folder.
 
 
 
