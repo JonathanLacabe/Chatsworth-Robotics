@@ -146,7 +146,8 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 
 -Configuration Variable
   Variables that are declared in the '#pragma region' of Vexcode (the upper lines of code), variables 
-  that serve as preprocessors to be used in th
+  that serve as preprocessors to be referenced in the program, exemplified by the controller and the
+  motors. These variables cannot be initialized normally and must be first defined as a preprocessor.
 
 -Deadzone:
   The space less than or equal to 15 units away from the center of a joystick, where the joystick
@@ -176,27 +177,13 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   autonomous routine and the userControl() function.
 
 -Motor Groups:
-  A variable in the code that includes multiple motors, allowing actions to be performed across
-  multiple motors with a call to one motor group, similar to a traversal of motors. A motor group 
-  would have been preferrable to use for the left and right motors of the drivebase, but this was 
-  not done for reasons outlined in the FAQ.
+  A config. variable that can be declared that includes multiple motors, allowing actions to be 
+  performed across multiple motors with a call to one motor group, similar to a traversal of 
+  motors. A motor group would have been preferrable to use for the left and right motors of the 
+  drivebase, but this was not done for reasons outlined in the FAQ.
 
 -Omega:
   A Chatsworth High School V5 robot, the code for which you are currently viewing.
-
--Preprocessor:
-  An operator that compiles before the rest of the program has compiled, which allows for text
-  substition. In Vexcode, this is used for declarations of irregular reference values such as
-  motors, motor groups, and any other piece of hardware that is being used.
-
--Tank Drive:
-  A control style that has individually controlled two sets of motors (the left and right wheels 
-  of the robot) using the joysticks or another mechanism on the controller, with one joystick 
-  controlling the left motors and the other controlling the right motors. Thus, pushing the 
-  joysticks all the way forward or backward would make the robot move straight forward or backward 
-  without turning. 
-  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
-  where extra maneuverability is not a factor. 
 
 -Over Under:
   The 2023-2024 season of Vex V5 robotics.
@@ -218,6 +205,11 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   preloaded triball in front, scoring the first point using it. See the auto documentation for 
   more detail.
 
+-Preprocessor:
+  An operator that compiles before the rest of the program, allowing for text substitution and, 
+  in Vexcode, variable declarations for devices, reference values such as motors, motor groups, 
+  and any other piece of hardware that is being used.
+
 -Rule F1:
   The most important rule in Vex, FRC, and all of Robotics.
 
@@ -229,7 +221,14 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   of the function call, which will cause the next line to run concurrent to the previous. This 
   is useful in a variety of circumstances, one instance described in the driveLat function. 
 
-
+-Tank Drive:
+  A control style that has individually controlled two sets of motors (the left and right wheels 
+  of the robot) using the joysticks or another mechanism on the controller, with one joystick 
+  controlling the left motors and the other controlling the right motors. Thus, pushing the 
+  joysticks all the way forward or backward would make the robot move straight forward or backward 
+  without turning. 
+  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
+  where extra maneuverability is not a factor. 
 
 
 
