@@ -172,9 +172,10 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   autonomous routine and the userControl() function.
 
 -Motor Groups:
-  A selection in the code where multiple motors are given the same value, such as when multiple
-  motors need to act the same. A motor group would have been preferrable to use for the left and 
-  right motors of the drivebase, but this was not done for reasons outlined in the FAQ.
+  A variable in the code that includes multiple motors, allowing actions to be performed across
+  multiple motors with a call to one motor group, similar to a traversal of motors. A motor group 
+  would have been preferrable to use for the left and right motors of the drivebase, but this was 
+  not done for reasons outlined in the FAQ.
 
 -Omega:
   A Chatsworth High School V5 robot, the code for which you are currently viewing.
