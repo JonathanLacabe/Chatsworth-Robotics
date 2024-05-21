@@ -67,7 +67,7 @@ bool RemoteControlCodeEnabled = true;
 //    Project: "Omega" - VEX V5 Over Under Robot. SKILLS AUTONOMOUS                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023
-//    Most Recent Edit:  5-21-2024 (This documentation should roughly be in its finished form.)
+//    Most Recent Edit: 5-21-2024 
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
@@ -97,138 +97,24 @@ d8'          `8b  `8'        88        88
 
 /*
 
+This is the Auto Skills program of the Omega robot, containing the same movement functions of 
+the brainiac+maniac code of the Omega bot (see the V5 folder of the Github repository) but with 
+a completely different, much simpler autonomous intended for the one minute skills autonomous 
+period. This program was created during the early days of the Chatsworth High School robotics 
+team, before the rookie programmer discovered that multiple autonomous programs could be placed 
+in the same script on separate spots on the brain. Whoops! This error was not made again, but 
+this script is kept in (largely) its original form as an insight to how the Chatsworth Robot 
+Team grew during its rookie season.
+[[[[make or link videos that show how to add multiple autonomous to the same program.]]]]
 
-==DICTIONARY==
-{Terms defined by coach Sam F.}
 
-The following dictionary is relevant to terms frequently used within this program's documentation.
+For a dictionary of terms used within the following documentation and throughout the Chatsworth
+Vex V5 projects, see the dictionary.txt file in the V5 folder of the Github repository.
 
 For additional Vex-specific terms to be defined, see here:
 https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
 For general robotics/engineering-related terms, see here:
 https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
-
-
-
--Arcade Drive:
-  A control style in which one joystick is used for moving/strafing movement (forward & 
-  backward), and the second joystick is used for directional movement, turning left or right. 
-  This is the control style used by this program, as demonstrated in the movement functions at 
-  the bottom. 
-
--Auton/Auto:
-  see "Autonomous Routine".
-
--Autonomous Routine:
-  The first 15 seconds of the match in which there is no driver input nor input from the 
-  controller allowed. The robot must move according to a pre-programmed script intended to 
-  maximize the number of points obtained during the time period, including obtaining the 'AWP' 
-  (see definition). Additionally, there is a one-minute autonomous skills match that teams can 
-  partake in at any time during competitions, where teams have one minute to demonstrate the 
-  amount of points that they can obtain using a pre-programmed specialized skills script. This is 
-  separate from user matches, in which the driver controls the robot during the time period. 
-
--A.W.P. (Autonomous Win Point):
-  A point obtainable through certain objectives in auto, worth half of one 'win', used in ranking 
-  calculations.
-
--brakeType:
-  A data type that defines how the motor will act when you tell it to stop. There are three main 
-  brakeTypes: coast, hold, and brake. Coast is the default, where all power is cut and the motor 
-  begins free-spinning. With coast, the motor will briefly continue spinning due to inertia. Hold 
-  forces the motor to stop at the position it is at and to stay in place, preferable in systems in 
-  with more motors and higher levels of torque. Brake give opposite direction speed until it stops, 
-  forcing it in the opposite direction before cutting all power. While coast allows for a brief 
-  moment of continued motion due to past power being supplied to the motor, brake immediately stops 
-  the motor.
-
--Configuration Variable
-  Variables that are declared in the '#pragma region' of Vexcode (the upper lines of code), variables 
-  that serve as preprocessors to be referenced in the program, exemplified by the controller and the
-  motors. These variables cannot be initialized normally and must be first defined as a preprocessor.
-
--Deadzone:
-  The space less than or equal to 15 units away from the center of a joystick, where the joystick
-  will oftentimes remain off-centered after use, leading to the robot moving very slowly without 
-  use of the controller. To prevent this, a block for all inputs from the joystick within the 
-  deadzone area must be created, seen in the driveControl function.
-
--Far/Near Side Auto:
-  In the game Over Under, which this program was designed for, there are two sides on which the 
-  robot can be placed during the 15 second and 1 minute autonomous periods. Because of this, the 
-  movements of the auto of one side essentially mirror those of the other, along with slight 
-  changes made to account for inconsistencies as detailed in the autonomous.
-
--Matchloading:
-  General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
-  for example, in the 2024-2025 V5 game "High Stakes", there is no matchloading whatsoever.
-
--Motor Cartridges:
-  Different gear amounts/ratios in the motors, which gives them different numbers of revolutions 
-  per minute. Green is the default, with an even amount of torque and speed. Red cartridges are 
-  high torque, with stronger motors but reduced speed. Blue cartridges are high speed, with weaker 
-  motors that run a lot faster. 
-
--Motor Encoder:
-  An integrated encoder. These are sensors that determine the position of the shaft of the motor
-  at any time, showing past movement and being useful for relative positioning, as used in the 
-  autonomous routine and the userControl() function.
-
--Motor Groups:
-  A config. variable that can be declared that includes multiple motors, allowing actions to be 
-  performed across multiple motors with a call to one motor group, similar to a traversal of 
-  motors. A motor group would have been preferable to use for the left and right motors of the 
-  drivebase, but this was not done for reasons outlined in the FAQ.
-
--Omega:
-  A Chatsworth High School V5 robot, the code for which you are currently viewing.
-
--Over Under:
-  The 2023-2024 season of Vex V5 robotics.
-
--Pneumatics:
-  Air-pressure powered activators, where compressed air kept in tanks provides an added boost 
-  to a robot action faster and greater than can be done by a motor. Pneumatics are applicable 
-  in specific situations where the robot needs to perform a quick linear actuation, in order 
-  to push or pull game objects. 
-
--Port/Port Number:
-  The spots on the brain where components such as motors, sensors, radio, etc. can be plugged 
-  in for use in programming. It is a good naming rule to include the port number of a specific 
-  component in the name of the component as used in the code, as demonstrated in the motors of 
-  this program.
-
--Preloading
-  Gameobjects that start on or touching the robot. The Omega bot begins in autonomous with a 
-  preloaded triball in front, scoring the first point using it. See the auto documentation for 
-  more detail.
-
--Preprocessor:
-  An operator that compiles before the rest of the program, allowing for text substitution and, 
-  in Vexcode, variable declarations for devices, reference values such as motors, motor groups, 
-  and any other piece of hardware that is being used.
-
--Rule F1:
-  The most important rule in Vex, FRC, and all of Robotics.
-
--Sequentialization:
-  A general rule of programming where lines of code are compiled top-to-bottom (except for 
-  preprocessors), with the program always waiting until one line has finished for the next one to 
-  run. This rule can be maintained during all programming events except for special circumstances: 
-  In Vexcode (as in other languages), this can be circumvented in functions such as spinFor through 
-  the addition of 'false' argument at the end of the function call, which will cause the next line 
-  to run concurrent to the previous. This is useful in a variety of circumstances, one instance 
-  described in the driveLat function. 
-
--Tank Drive:
-  A control style that has where two sets of motors (the left and right wheels of the robot) are 
-  individually controlled using the joysticks or another mechanism on the controller, with one 
-  joystick controlling the left motors and the other controlling the right motors. Thus, pushing 
-  the joysticks all the way forward or backward would make the robot move straight forward or 
-  backward without turning. 
-  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
-  where extra maneuverability is not necessary. 
-
 
 
 ===FAQ===
@@ -307,7 +193,7 @@ float DEADZONE = 15.0;
 
 //===AUTONOMOUS FUNCTIONS===
 /*The four functions below, driveLat, turnDrive, moveArm, and driveSpeed, are primarily designed to 
-  be used in the code for the 15-second autonomous(void) routine.*/
+  be used in the code for the 1 minute autonomous(void) routine.*/
 
 //driveLat(double degree)
 //This function moves the robot forward or backward.
@@ -400,8 +286,7 @@ void moveArm(double degree){
     double speed
     The 'speed' inputted by the user is indicative of a percentage of the maximum possible speed the 
     motors can move. The motors cannot move over 100%, and running the motors at 100% constantly will 
-    burn them out very quickly. Only for very brief periods in the autonomous routine are any motors 
-    set to 100% velocity.
+    burn them out very quickly. 
     Any below 10% will produce a very slow autonomous.
 
     std::string type
@@ -495,21 +380,38 @@ void preAutonomous(void) {
   wait(1, seconds);
 }
 
-/*NOTE: This is the 15-second autonomous for the specific Chatsworth Robotics Vex V5 robot. This can 
-  be used as the basis for another autonomous program, but for a clean template for such purposes, 
-  see the VEX Template in the VEX folder. For the one-minute skills autonomous, see the program named 
-  "brainiacSKILLSAUTO" in the Github repository in the Vex folder. 
+/*NOTE: This is the one-minute skills autonomous for the Omega Chatsworth Robotics Vex V5 robot. 
+  This specific autonomous is very simplistic and is meant for the Over Under game specifically. For 
+  a clean template usable for future auto routine with all the base functions, see the VEX Template 
+  in the VEX folder. For the 15-second autonomous played at the beginning of matches, see the program 
+  named "brainiac+maniac.v5cpp" in the Github repository in the Vex folder. 
 */
 void autonomous(void) {
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
 
-//READ THIS 1-9-2023
-//FOR THE MATCHLOADING, the arm should be set all the way in the front and it would spin to position -145 (test) to fling the thing backward.
 
+/*In order to faciliate preloading and to make the arm movement code function, the built-in motor 
+  encoder is utilized to retain the initial position of the lift motors in the program memory, e.g. 
+  storing the position that the arm is moved to before autonomous is started. 
+
+  As the first position of the arm is the base position for all other positions, this position is 
+  set to be zero below. Because of how the moveArm function works, any argument greater than the 
+  current position (in degrees) of the arm will move it forward, while any argument lesser than the 
+  current position will move the arm toward the starting position.
+
+  It is IMPERATIVE that the arm is always moved into the same position before starting, and that 
+  the rest of the program is based off of this initial position. This same logic can be used in an 
+  algorithm used for preventing the robot arm from touching the ground, as noted in the FAQ. 
+  The motor encoder is useful for arm movements such as the AWP (Autonomous Win Point), obtained by 
+  touching the horizontal elevation bar with the arm at the end of the routine.
+*/
   liftMotor5.setPosition(0, degrees);
   liftMotor10.setPosition(0, degrees);
-liftMotor5.setVelocity(68, percent);
+
+
+
+  liftMotor5.setVelocity(68, percent);
   liftMotor10.setVelocity(68, percent);
   driveSpeed(90);
 
@@ -517,9 +419,11 @@ liftMotor5.setVelocity(68, percent);
   //#1 - Set the arm to position where it can hit the bar without going through.
   liftMotor5.spinToPosition(80, degrees, false);
   liftMotor10.spinToPosition(80, degrees, false);
+
   wait(0.6, seconds);
   //#2 - move way forward so that the robot could reach the end and push all of the triballs in.
   driveLat(300);
+
   //#3 - Wait slightly any time and then come all the way back, hopefully touching the back bar at the very end.
    wait(0.5, seconds);
   driveLat(-200);
