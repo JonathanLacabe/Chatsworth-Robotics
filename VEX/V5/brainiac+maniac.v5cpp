@@ -66,13 +66,13 @@ bool RemoteControlCodeEnabled = true;
 //    Project: "Omega" - VEX V5 Over Under Robot.                                               
 //    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
 //    Created: 12-11-2023 
-//    Most Recent Edit: 5-18-2024 (post-AP tests. woop woop)
+//    Most Recent Edit: 5-20-2024 (This documentation should roughly be in its finished form.)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
 
 
-//DOCUMENTATION UNDER CONSTRUCTION AS OF 5-18-2024
+//DOCUMENTATION UNDER CONSTRUCTION AS OF 5-20-2024
 
 
 /*
@@ -229,7 +229,7 @@ What drive control does this program use?
 This program uses tank drive control as per recommendation of the team coach, Sam F.
 
 What motors does this program utilize?
-Though utilizing no motor groups (though it may in the future, specifically for the lift motors),
+Though utilizing no motor groups (though it may in the future, specifically for the drive motors),
 this program has six wheel motors, three right and three left motors, and two motors for the arm.
 The wheel motors use green cartridges, while the arm motors use red cartridges.
 The Chatsworth Robotics Vex robot is unique in that it has two arm motors, allowing the arm to be 
