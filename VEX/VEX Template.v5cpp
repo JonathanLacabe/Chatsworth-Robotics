@@ -27,21 +27,11 @@ brain Brain;
 
 
 // Robot configuration code.
-motor rightBackMotor4 = motor(PORT4, ratio18_1, true);
-
-motor rightMiddleMotor6 = motor(PORT6, ratio18_1, true);
-
-motor rightFrontMotor20 = motor(PORT20, ratio18_1, true);
-
-motor leftBackMotor2 = motor(PORT2, ratio18_1, false);
-
-motor leftMiddleMotor7 = motor(PORT7, ratio18_1, false);
-
-motor leftFrontMotor9 = motor(PORT9, ratio18_1, false);
-
-motor liftMotor5 = motor(PORT5, ratio36_1, true);
-
-motor liftMotor10 = motor(PORT10, ratio36_1, false);
+//MOTORS ARE ADDED AS FOLLOWS:
+//motor <motorName> = motor(<port number>, <gear cartridge>, <motor setting>);
+//FOR EXAMPLE:
+//motor rightMiddleMotor6 = motor(PORT6, ratio18_1, true);
+//For the motor setting, normal is false and reverse is true
 
 controller Controller1 = controller(primary);
 
@@ -88,6 +78,12 @@ copy-and-pasted in to function.
 If you want to see a fully documented script and autonomous routine that was actually used for
 V5 competitions, see the file 'brainiac+maniac.v5cpp' (found in the V5 folder of the repository).
 
+
+To understand important terms such as Motor Groups and Configuration Variables, see the dictionary
+in the VEX V5 folder.
+[[[do this!!!]]]
+
+
 To understand terms often used in the Vex world, go here:
 https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
 For general robotics/engineering-related terms, go here:
@@ -99,23 +95,29 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 
 ===FAQ===
 
+Where can I find an already programmed & documented Vex V5 project that uses this template?
+Great question, mister. In the 'brainiac+maniac.v5cpp' file of the V5 folder in the Github
+repository, you can find a highly-documented project, complete with a dictionary of terms and even
+more answered FAQ questions as to the rationale of the programming and designing of the robot.
+Check it out if you need inspiration in designing your autonomous or other programming!
+[[[[[Additionally, there are several guides available on the github repository that cover more
+advanced topics, such as PID and odometry, so check those out when you are ready.]]]]]
+
 What drive control does this template use?
 This template utilizes tank drive control.
 
 What motors does this program utilize?
-Though utilizing no motor groups (though it may in the future, specifically for the lift motors),
-this program has six wheel motors, three right and three left motors, and two motors for the arm.
-The wheel motors use green cartridges, while the arm motors use red cartridges.
-The Chatsworth Robotics Vex robot is unique in that it has two arm motors, allowing the arm to be 
-held in place, useful when grabbing a triball or other actions requiring exact positioning. 
-
-Why aren't the motor encoders used to prevent the arm from hitting the ground?
-This was an initial task that was worked on for some weeks, with some untested code having already 
-been written (the comments visible in the armControl() function of older commits). Once it was 
-discovered that the ability of the robot to lift itself off of the ground using the arm was useful 
-for a variety of purposes, we shelved this plan. The idea may be revisited in future robots/designs, 
-however. Because the motor encoder is not used, the arm can push the robot upward from the ground or 
-from the elevation bar (in the game Over Under) to achieve an elevated position.
+This template demonstrates the use of three distinct sections of motors: Left drivebase motors, 
+right drivebase motors, and arm/intake motors. Motor groups, config. variables in the code that 
+include multiple motors to allow actions to be performed across all of them, can be created for 
+whichever motors consistently have actions taken upon them that identical to similar motors, such 
+as the left drivebase motors and right drivebase motors (themselves). This program uses two motor 
+groups: the left and right drivebase motors.
+A two-motor arm system, such as the one demonstrated in the 'brainiac+maniac.v5cpp' file of the V5 
+folder, would not be able to use a motor group, as the two motors always have separate motor settings 
+and thus have different function call arguments. Only when a set of motors always act identically to 
+one another, and there are no plans for individualization, is it recommended for motor groups to be 
+used.
 
 How do I add/change devices (motors, motor groups, controllers)? 
 To add a motor, click the motor icon in the right of the blue area below the taskbar (the leftmost
@@ -126,22 +128,17 @@ especially if using tank control.
 
 Note: Generally, left motors will be set to "Normal", while right motors will be set to "Reverse". 
 
-The example motors seen in the functions and labled in the #pragma region were those used for the 
-Omega robot at Chatsworth, so feel free to change them. The naming system of the motors in this 
-program is done to relate each motor to its port number, making the code more legible from a 
-hardware perspective. If the name were to change, every instance of this motor used in the code 
-would need to be edited to reflect the change.
+What should I title my motors and other configuration variables?
+A naming rule of thumb is to include the port number of the specific component in the name of the 
+config. variable. This is done to relate each motor to its port number, making the code more 
+legible from a hardware perspective. If the name is ever changed, every instance of this motor used 
+in the code would need to be edited to reflect the change, so be wise with your names.
 
-Does your robot use pneumatics/program account for pneumatics?
-No. As a general rule of thumb, the Chatsworth Robotics Team believes that pneumatics should only
-ever be used where ever every other possible solution has been exhausted. Pneumatics are applicable
-in specific situations where the robot needs to perform a quick linear actuation, in order to push 
-or pull game objects. 
+How can I add pneumatics to my program?
+[[[[Add this information with all of the directory stuff!!!!]]]]]
 
-Does this program utilize PID, odometry, or custom motion algorithms?
-No. We are intending to use PID algorithms for our FRQ robot to automatically position a turret 
-toward a goal in shooting games, but we are yet to add PID algorithms to a V5 bot. 
-[[update with more detail when FRC is done, or if PID is used for omicron]]
+How do I add PID, odometry, or custom motion algorithms?
+[[[[Add this information with all of the directory stuff!!!!]]]]]
 
 
 
