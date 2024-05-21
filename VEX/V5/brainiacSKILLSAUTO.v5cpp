@@ -64,13 +64,229 @@ bool RemoteControlCodeEnabled = true;
 
 // ----------------------------------------------------------------------------
 //                                                                            
-//    Project: the best robot                                               
-//    Author: jonathan was  here
-//    Created: 12-11-2023, 
-//    Most Recent Edit: 1-27-2024
+//    Project: "Omega" - VEX V5 Over Under Robot. SKILLS AUTONOMOUS                                               
+//    Author: Chatsworth Charter Robotics Team (read: JONATHAN LACABE. including the documentation)
+//    Created: 12-11-2023
+//    Most Recent Edit:  5-21-2024 (This documentation should roughly be in its finished form.)
 //    Configuration:        
 //                                                                            
 // ----------------------------------------------------------------------------
+/*
+       db   8b           d8  88        88  
+      d88b  `8b         d8'  88        88  
+     d8'`8b  `8b       d8'   88        88  
+    d8'  `8b  `8b     d8'    88aaaaaaaa88  
+   d8YaaaaY8b  `8b   d8'     88""""""""88  
+  d8""""""""8b  `8b d8'      88        88  
+ d8'        `8b  `888'       88        88  
+d8'          `8b  `8'        88        88  
+
+
+
+/*IF YOU ARE IMPORTING THIS CODE FROM GITHUB INTO VEXCODE V5: MAKE SURE TO ADD THE EIGHT MOTORS AND 
+  THE CONTROLLER IN THE DEVICES SCREEN AS DETAILED IN THE FAQ. ENSURE THE GENERATED ROBOT CONFIG. 
+  VARIABLES OF THE DEVICES ARE IDENTICAL TO THOSE IN THE GITHUB FILE, AS COPY-PASTING ALONE WILL 
+  NOT ADD THE DEVICES INTO THE DEVICES SCREEN. If you use an IDE such as VSCode, then there should 
+  be no issue, as the motors only need to be copy-and-pasted in to function.
+  
+  This is all unless you want to make your own version of the code with different motors and things, 
+  in which case feel free to change/add whatever you want.
+*/
+
+
+
+/*
+
+
+==DICTIONARY==
+{Terms defined by coach Sam F.}
+
+The following dictionary is relevant to terms frequently used within this program's documentation.
+
+For additional Vex-specific terms to be defined, see here:
+https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
+For general robotics/engineering-related terms, see here:
+https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
+
+
+
+-Arcade Drive:
+  A control style in which one joystick is used for moving/strafing movement (forward & 
+  backward), and the second joystick is used for directional movement, turning left or right. 
+  This is the control style used by this program, as demonstrated in the movement functions at 
+  the bottom. 
+
+-Auton/Auto:
+  see "Autonomous Routine".
+
+-Autonomous Routine:
+  The first 15 seconds of the match in which there is no driver input nor input from the 
+  controller allowed. The robot must move according to a pre-programmed script intended to 
+  maximize the number of points obtained during the time period, including obtaining the 'AWP' 
+  (see definition). Additionally, there is a one-minute autonomous skills match that teams can 
+  partake in at any time during competitions, where teams have one minute to demonstrate the 
+  amount of points that they can obtain using a pre-programmed specialized skills script. This is 
+  separate from user matches, in which the driver controls the robot during the time period. 
+
+-A.W.P. (Autonomous Win Point):
+  A point obtainable through certain objectives in auto, worth half of one 'win', used in ranking 
+  calculations.
+
+-brakeType:
+  A data type that defines how the motor will act when you tell it to stop. There are three main 
+  brakeTypes: coast, hold, and brake. Coast is the default, where all power is cut and the motor 
+  begins free-spinning. With coast, the motor will briefly continue spinning due to inertia. Hold 
+  forces the motor to stop at the position it is at and to stay in place, preferable in systems in 
+  with more motors and higher levels of torque. Brake give opposite direction speed until it stops, 
+  forcing it in the opposite direction before cutting all power. While coast allows for a brief 
+  moment of continued motion due to past power being supplied to the motor, brake immediately stops 
+  the motor.
+
+-Configuration Variable
+  Variables that are declared in the '#pragma region' of Vexcode (the upper lines of code), variables 
+  that serve as preprocessors to be referenced in the program, exemplified by the controller and the
+  motors. These variables cannot be initialized normally and must be first defined as a preprocessor.
+
+-Deadzone:
+  The space less than or equal to 15 units away from the center of a joystick, where the joystick
+  will oftentimes remain off-centered after use, leading to the robot moving very slowly without 
+  use of the controller. To prevent this, a block for all inputs from the joystick within the 
+  deadzone area must be created, seen in the driveControl function.
+
+-Far/Near Side Auto:
+  In the game Over Under, which this program was designed for, there are two sides on which the 
+  robot can be placed during the 15 second and 1 minute autonomous periods. Because of this, the 
+  movements of the auto of one side essentially mirror those of the other, along with slight 
+  changes made to account for inconsistencies as detailed in the autonomous.
+
+-Matchloading:
+  General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
+  for example, in the 2024-2025 V5 game "High Stakes", there is no matchloading whatsoever.
+
+-Motor Cartridges:
+  Different gear amounts/ratios in the motors, which gives them different numbers of revolutions 
+  per minute. Green is the default, with an even amount of torque and speed. Red cartridges are 
+  high torque, with stronger motors but reduced speed. Blue cartridges are high speed, with weaker 
+  motors that run a lot faster. 
+
+-Motor Encoder:
+  An integrated encoder. These are sensors that determine the position of the shaft of the motor
+  at any time, showing past movement and being useful for relative positioning, as used in the 
+  autonomous routine and the userControl() function.
+
+-Motor Groups:
+  A config. variable that can be declared that includes multiple motors, allowing actions to be 
+  performed across multiple motors with a call to one motor group, similar to a traversal of 
+  motors. A motor group would have been preferable to use for the left and right motors of the 
+  drivebase, but this was not done for reasons outlined in the FAQ.
+
+-Omega:
+  A Chatsworth High School V5 robot, the code for which you are currently viewing.
+
+-Over Under:
+  The 2023-2024 season of Vex V5 robotics.
+
+-Pneumatics:
+  Air-pressure powered activators, where compressed air kept in tanks provides an added boost 
+  to a robot action faster and greater than can be done by a motor. Pneumatics are applicable 
+  in specific situations where the robot needs to perform a quick linear actuation, in order 
+  to push or pull game objects. 
+
+-Port/Port Number:
+  The spots on the brain where components such as motors, sensors, radio, etc. can be plugged 
+  in for use in programming. It is a good naming rule to include the port number of a specific 
+  component in the name of the component as used in the code, as demonstrated in the motors of 
+  this program.
+
+-Preloading
+  Gameobjects that start on or touching the robot. The Omega bot begins in autonomous with a 
+  preloaded triball in front, scoring the first point using it. See the auto documentation for 
+  more detail.
+
+-Preprocessor:
+  An operator that compiles before the rest of the program, allowing for text substitution and, 
+  in Vexcode, variable declarations for devices, reference values such as motors, motor groups, 
+  and any other piece of hardware that is being used.
+
+-Rule F1:
+  The most important rule in Vex, FRC, and all of Robotics.
+
+-Sequentialization:
+  A general rule of programming where lines of code are compiled top-to-bottom (except for 
+  preprocessors), with the program always waiting until one line has finished for the next one to 
+  run. This rule can be maintained during all programming events except for special circumstances: 
+  In Vexcode (as in other languages), this can be circumvented in functions such as spinFor through 
+  the addition of 'false' argument at the end of the function call, which will cause the next line 
+  to run concurrent to the previous. This is useful in a variety of circumstances, one instance 
+  described in the driveLat function. 
+
+-Tank Drive:
+  A control style that has where two sets of motors (the left and right wheels of the robot) are 
+  individually controlled using the joysticks or another mechanism on the controller, with one 
+  joystick controlling the left motors and the other controlling the right motors. Thus, pushing 
+  the joysticks all the way forward or backward would make the robot move straight forward or 
+  backward without turning. 
+  Tank drive is useful in any instance in which much power and speed is needed in one direction, 
+  where extra maneuverability is not necessary. 
+
+
+
+===FAQ===
+
+What drive control does this program use?
+This program uses tank drive control as per recommendation of the team coach, Sam F.
+
+What motors does this program utilize?
+Though utilizing no motor groups (though it may in the future, specifically for the drive motors),
+this program has six wheel motors, three right and three left motors, and two motors for the arm.
+The wheel motors use green cartridges, while the arm motors use red cartridges.
+The Chatsworth Robotics Vex robot is unique in that it has two arm motors, allowing the arm to be 
+held in place, useful when grabbing a triball or other actions requiring exact positioning. 
+
+Why aren't the motor encoders used to prevent the arm from hitting the ground?
+This was an initial task that was worked on for some weeks, with some untested code having already 
+been written (the comments visible in the armControl() function of older commits). Once it was 
+discovered that the ability of the robot to lift itself off of the ground using the arm was useful 
+for a variety of purposes, we shelved this plan. The idea may be revisited in future robots/designs, 
+however. Because the motor encoder is not used, the arm can push the robot upward from the ground or 
+from the elevation bar (in the game Over Under) to achieve an elevated position.
+
+How do I add/change devices (motors, motor groups, controllers)? 
+To add a motor, click the motor icon in the right of the blue area below the taskbar (the leftmost
+icon) to access the devices screen. Here, you will be able to add different motors along with their 
+specifications, such as gear cartridge and motor direction. If you wish to add a motor group, make 
+sure the motors you choose are both moving the same direction (both being left or right motors), 
+especially if using tank control.
+
+Note: Generally, left motors will be set to "Normal", while right motors will be set to "Reverse". 
+
+The example motors seen in the functions and labled in the #pragma region were those used for the 
+Omega robot at Chatsworth, so feel free to change them. The naming system of the motors in this 
+program is done to relate each motor to its port number, making the code more legible from a 
+hardware perspective. If the name were to change, every instance of this motor used in the code 
+would need to be edited to reflect the change.
+
+Does your robot use pneumatics/program account for pneumatics?
+No. As a general rule of thumb, the Chatsworth Robotics Team believes that pneumatics should only
+ever be used where ever every other possible solution has been exhausted. See the definition for
+pneumatics for specific instances in which they are applicable.
+
+Does this program utilize PID, odometry, or custom motion algorithms?
+No. We are intending to use PID algorithms for our FRQ robot to automatically position a turret 
+toward a goal in shooting games, but we are yet to add PID algorithms to a V5 bot. 
+[[update with more detail when FRC is done, or if PID is used for omicron]]
+
+Why doesn't this program utilize motor groups?
+Originally, it was the belief of the programmer that the motors would have to be individualized 
+for specific purposes that were later cut (and forgotten). For this reason, motor groups were not
+used and it would be only later on that it was realized that this program is a perfect example of
+a scenario in which they would be used. To see how motor groups would be used, look in the Vex
+Template in the Vex folder.
+
+
+
+*/
+
 
 
 //pivot buttons
@@ -80,21 +296,64 @@ bool RemoteControlCodeEnabled = true;
 // Allows for easier use of the VEX Library
 using namespace vex;
 
+/*This variable is meant to account for what the joystick is released by the driver, leaving it 
+  slightly off-center. See the driveControl function for usage.*/
 float DEADZONE = 15.0;
 
 // Begin project code
+
+
+
+
+//===AUTONOMOUS FUNCTIONS===
+/*The four functions below, driveLat, turnDrive, moveArm, and driveSpeed, are primarily designed to 
+  be used in the code for the 15-second autonomous(void) routine.*/
+
+//driveLat(double degree)
+//This function moves the robot forward or backward.
+
+/*Parameter:
+    double degree
+    This takes in a value used to tell the motors how many degrees to move backward or forward.
+    The number of degrees is not relevant to anything except for the brain's encoder.
+    A positive value will move the robot forward, while negative degrees will move the robot
+    backwards.
+*/
 void driveLat(double degree){
-  //+ = forward while negative degrees move backwards.
-  leftBackMotor2.spinFor(forward, degree, degrees, false);//this false is VERY cool because it avoids sequentialization
+  /*The false arguments at the end of these lines are VERY cool, as they remove sequentialization.
+    When this argument is set to be true or left blank, the rest of the program will not run until
+    this line has completed. The false statement allows mulltiple lines to run simultaneously, 
+    which is useful as this function is designed to move all of the wheel motors to move in one 
+    direction.
+    These lines are present in the driveLat and turnDrive functions, the only ones that set the
+    position of the wheel motors. The moveArm function has similar arguments and setup, except it 
+    uses the built-in motor encoder and the spinToPosition function.
+  */
+  leftBackMotor2.spinFor(forward, degree, degrees, false);
   leftMiddleMotor7.spinFor(forward, degree, degrees, false);
   leftFrontMotor9.spinFor(forward, degree, degrees, false);
   rightBackMotor4.spinFor(forward, degree, degrees, false);
   rightMotor6.spinFor(forward, degree, degrees, false);
+  /*The final line of each of the four functions does not have the ending false argument, as it will 
+    cause the program to actually run the code instead of skipping over everything. If the argument 
+    is set to false, then none of the code called in the function will run when used  except for its 
+    final call, and will serve to disable any function using it.
+  */
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
 
+//turnDrive(double degree)
+//This function turns the robot in a given direction.
+
+/*Parameter:
+    double degree
+    The 'degree' inputted by the user is used to tell the motors how many degrees to pivot the robot 
+    in place.
+    The number of degrees is not relevant to anything except for the brain's encoder.
+    A positive value will move the robot forward, while negative degrees will move the robot
+    backwards.
+*/
 void turnDrive(double degree){
-  // if val +, move left. if val -, move right.
   leftBackMotor2.spinFor(reverse, degree, degrees, false);
   leftMiddleMotor7.spinFor(reverse, degree, degrees, false);
   leftFrontMotor9.spinFor(reverse, degree, degrees, false);
@@ -103,36 +362,144 @@ void turnDrive(double degree){
   rightFrontMotor20.spinFor(forward, degree, degrees);
 }
 
-void moveArm(double degree){//this could easily be changed to spinToPosition using the encoder, 
-//which would require doing some trial and error to figure out the positioning, would ask to ask sam about that
-  //positive = down, negatives = up
-  if(degree>0){
-    liftMotor5.spinFor(reverse, degree,degrees);
-    liftMotor10.spinFor(reverse, degree,degrees);
-  } else if (degree<0){
-    liftMotor5.spinFor(forward, degree,degrees);
-    liftMotor10.spinFor(forward, degree,degrees);
+
+//moveArm(double degree)
+//This function moves the arm up and down.
+
+/*Parameter:
+    double degree
+    The 'degree' inputted by the user determines how far or whether the arm motors move forward or 
+    backward.
+    The arm motor uses the red cartridge, while the wheel motors use green cartridges. Apart from 
+    that, the arm motors are identical to the wheel motors, one being reverse and the other normal.
+    The number of degrees is not relevant to anything except for the brain's encoder. Note that this
+    is the only function that uses the encoder to base movements off of the initial, user-set 
+    position of the motors, as elaborated on within the function.
+    Because of the nature of the encoder, if the value is greater than the current position of the 
+    arm (which is in reference to whatever the starting position & value were set to be), then the
+    arm will move forward, away from starting position, while if the value is lesser than the 
+    current position, then the arm will move backward, toward starting position.
+*/
+void moveArm(double degree){
+  /*The liftMotors are moved into the given position using the spinToPosition function. This is 
+    using the built in encoder of the motor, which can recall the initial position of the motor when 
+    the code was first activated, further detailed in the setPosition function call in the 
+    autonomous function. An alternate version of this function with the spinFor function, which does 
+    not use the encoder, can be found in the VEX Template.
+  */
+  //The false argument below is done for the same purposes as the moveLat and turnDrive functions.
+  liftMotor5.spinToPosition(degree, degrees, false);
+  liftMotor10.spinToPosition(degree, degrees);
+  
+}
+
+//driveSpeed(double speed)
+//This function sets the velocity of the arm motors or arm motors to be a specific speed.
+
+/*Parameters:
+    double speed
+    The 'speed' inputted by the user is indicative of a percentage of the maximum possible speed the 
+    motors can move. The motors cannot move over 100%, and running the motors at 100% constantly will 
+    burn them out very quickly. Only for very brief periods in the autonomous routine are any motors 
+    set to 100% velocity.
+    Any below 10% will produce a very slow autonomous.
+
+    std::string type
+    The 'type' of speed changed inputted by the user determines which motors are going to be set to 
+    the velocity 'speed', preventing different groups of motors from all being changed to a new 
+    velocity where changes are not needed, such as a change in the speed of the arm motors resulting 
+    in the wheel motors changing speed as well.
+*/
+
+void driveSpeed(double speed, std::string type){
+  if(type=="drive"){
+    leftBackMotor2.setVelocity(speed, percent);
+    leftMiddleMotor7.setVelocity(speed, percent);
+    leftFrontMotor9.setVelocity(speed, percent);
+    rightBackMotor4.setVelocity(speed, percent);
+    rightMotor6.setVelocity(speed, percent);
+    rightFrontMotor20.setVelocity(speed, percent);
+  }else if(type=="lift"){
+    liftMotor5.setVelocity(speed, percent);
+    liftMotor10.setVelocity(speed, percent);
+  /*If this function is ever called for something other than "drive" or "lift" (or for other 
+    strings which can be added in the future), then everything that can possibly be done to alert 
+    the driver of a malfunction in the program, short of stopping the code altogether, must be done, 
+    as seen below:
+  */
+  }else{
+  /*Sets the brain to show as bright red. If visible to the driver, this should immediately be cause 
+    for concern.*/
+    Brain.Screen.setFillColor(red);
+  /*A pulse Controller Rumble, additionally alerting the driver of the error if the brain of the 
+    robot is out of sight.*/
+    Controller.rumble("-.-.");
+  /*The for loop below will cause each of the lines within it to be ran 10 times, filling the red 
+    brain interface with error messages.*/
+    for(int x =0; x<10; x++){
+      Brain.Screen.print("Error: The driveSpeed function was called improperly.");
+      printf("Error: The driveSpeed function was called improperly.");
+    }
+    
   }
   
 }
 
-void driveSpeed(double speed){
-  //0-100, and I'l burn out motors if always set to 100
-  leftBackMotor2.setVelocity(speed, percent);
-  leftMiddleMotor7.setVelocity(speed, percent);
-  leftFrontMotor9.setVelocity(speed, percent);
-  rightBackMotor4.setVelocity(speed, percent);
-  rightMotor6.setVelocity(speed, percent);
-  rightFrontMotor20.setVelocity(speed, percent);
-}
+
+
+
+
+
+/*
+==RULES OF AUTONOMOUS==
+  ...and some general 
+  design philosophy.
+
+
+1. When establishing an autonomous routine, make sure to create an exact, replicable initial position 
+  for the robot to start the routine. This includes the positioning of the robot on the field, the 
+  initial position of the arm or any other system that uses the built-in motor encoder to determine 
+  positioning, and any other attributes that can be manipulated, such as specific or preloaded 
+  triballs. It is advised to use tools and other on-hand pieces to create a consistent placement for 
+  the robot and other field objects.
+
+2. DO NOT PANIC WHEN THE ROBOT PERFORMS AN ALTERED AUTO ROUTINE WITHOUT CHANGING THE CODE:
+  It may occur that on testing changes made to the code the previous day, or even just upon changing 
+  the battery, the autonomous routine of your robot will have changed slightly. This can be 
+  frustrating, especially when the code seemed perfected. 
+  This is occuring because the brain has a mind of its own (pun intended), as the internal counters
+  and mechanisms fluctuate in accuracy and precision due to a variety of factors, such as temperature 
+  and battery power. Thus, as the power of the battery decreases, any autonomous routine will begin 
+  to run with increased error and imprecision. This can greatly affect routines that rely on 
+  precision.
+  
+  BEFORE CHANGING YOUR CODE, TEST THE ROBOT AT FULL BATTERY. The brain and internal counters will be
+  at optimal performance. If the errors and irregularities continue, approach changing the code with
+  caution, and always take backups of the last known functional version to revert to if needs be.
+  
+  Slight differences in the positioning of the robot can easily result in slight errors snowballing 
+  into a non-functional routine, as stated in rule 1. Always ensure a consistent robot placement and 
+  matchfield.
+
+
+3. Don't be afraid to use trial and error! The best programs are always created through rigorous 
+  testing and patching 999999999 errors/slight inconsistencies. Believe in yourself :3
+  
+*/
+
 
 void preAutonomous(void) {
-  // actions to do when the program starts
+  //Actions performed when the autonomous program starts.
   Brain.Screen.clearScreen();
   Brain.Screen.print("pre auton code");
   wait(1, seconds);
 }
 
+/*NOTE: This is the 15-second autonomous for the specific Chatsworth Robotics Vex V5 robot. This can 
+  be used as the basis for another autonomous program, but for a clean template for such purposes, 
+  see the VEX Template in the VEX folder. For the one-minute skills autonomous, see the program named 
+  "brainiacSKILLSAUTO" in the Github repository in the Vex folder. 
+*/
 void autonomous(void) {
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
@@ -188,151 +555,217 @@ liftMotor5.setVelocity(68, percent);
 
 
 
+}
 
-    /*
-  liftMotor5.setVelocity(68, percent);
-  liftMotor10.setVelocity(68, percent);
-  liftMotor5.spinToPosition(140, degrees, false);
-  liftMotor10.spinToPosition(140, degrees, false);
+//===MOVEMENT FUNCTIONS===
+/*The three functions below, armControl, motorControl, and driveControl, are primarily designed for 
+  use in the userControl function, which continously takes in input from the controller and allow the 
+  robot and arm to move. The functions work for the lift, drive, and for the drive algorithm 
+  respectively.
 
+  For a better understanding of the Vex controller and how it is used in these functions, find the 
+  'VexController.png' file in the V5 folder of the Github repository. 
   
-    //#1 - Move forward with the triball matchloaded at an exact angle so that it lodges into the goal zone.
-  driveSpeed(90);
-  driveLat(918);//drive forward and hit thing into thing
-  wait(0.2, seconds);
-  //#2 - Move backward to avoid knocking out the triball when turning.
-  driveSpeed(95);
-  driveLat(-5);
-  driveSpeed(100);
-  driveLat(-105);//move backward
-
-  turnDrive(-601);                                       //  -435 = 135 degrees left.  #3 - Turn 135 degrees to position itself to move infront of the match load zone.
-  wait(0.1, seconds);
-
-//#4 - Move forward and turn rightward at 85% speed to be directly in front of the match load zone.
-  driveLat(285);
-  driveSpeed(85);
-  turnDrive(-275);//junior programmers edit here.
-//#5 - The J.P.S.S.: At drive speed at 60%, drive forward enough to be touching the match load zone barrier.
-  //junior programmer's spinny spinny
-  driveSpeed(60);
-  driveLat(228);
-  wait(0.12, seconds);
-
-  //#6 - Move arm downward within the match load zone at 40% velocity.
-  wait(1, seconds);
-
-  //SPINNY SPINNY//#7 - Swipe the triball to the left from the center to knock the triball out of the match load zone.
-  driveSpeed(65);
-  turnDrive(550);
-  //#8 - Move the arm back into the original position (e.g. 0 degrees on the arm motor).
-  liftMotor5.spinToPosition(0, degrees, false);
-  liftMotor10.spinToPosition(0, degrees, false);//these values need to be changed because the arm isnt supposed to go all the way back up
-  wait(0.8, seconds);
-
-  //RUN AWAY SMOKEY//#9 - Turn every slightly to the left and drive a good distance forward, then turn a bit rightward to account for weird positioning, and push forward the final stretch.
-  turnDrive(-2);
-  wait(0.2, seconds);
-  driveLat(958);
-  wait(0.1, seconds);
-    turnDrive(69);
-  driveLat(348);// these values may change because robot can't go to other side of field/it WAS 909
-wait(0.2, seconds);
-
-  //#10 - whack 'em. Move down the arm to touch/hit the barrier at 60% speed.
-liftMotor5.spinToPosition(154, degrees, false);
-  liftMotor10.spinToPosition(159, degrees, false);
+  The values outputted by the joystick range from -100 to 100, based on the vertical position of the 
+  joystick only. The left joystick is used to determine forward and backward movement, while the 
+  right joystick determines left and right movement. This is done purely through moving the joysticks 
+  downward or upward, downward being backward for the left joystick and left for the right joystick.  
+  The two buttons in the top right of the controller, R1 and R2, determine the movement of the arm, 
+  the intake of the robot. R2 moves the arm forward, away from the starting position and toward the 
+  ground, while R1 moves the arm backward.
+  */
 
 
+
+//armControl(bool upIn, bool downIn)
+//This function moves the arm up and down according to controller inputs.
+
+/*Parameter:
+    bool upIn
+    The boolean reflecting whether button R2 on the controller is being pressed or not, as determined 
+    continously by the userControl().
+    If R2 is being pressed and the boolean is true, the arm will move forward.
+
+    bool downIn
+    The boolean reflecting whether button R1 on the controller is being pressed or not, as determined
+    continously by the userControl().
+    If R1 is being pressed and the boolean is true, the arm will move backward.
 */
-}
-
 void armControl(bool upIn, bool downIn){
- //if(upIn & /*motor.encoder.position > 0*/){}
-
-//if down && motor.encoder.position <140{}
-  if(upIn){///     && (liftMotor10.position(degrees) < 140.0) && (liftMotor5.position(degrees) < 140.0)
-  //ToDo: this NEEDS TO BE CHANGED, THE ENCODER CODE CAN BE IMPROVED
-  //for the encoder, these should be changed to be spinFor of
-  //a specific variable distance:
-  //int degree = //figure out degree based on auto
-    //while degree< some numbrar{}
-        printf("VEXcode");
-        liftMotor5.spin(forward, 50, percent);
-        liftMotor10.spin(forward, 50, percent);
-      
-    }else if(downIn){//while degree> smaller numbrar[]
-    //I would believe
-      liftMotor5.spin(reverse, 50, percent);
-      liftMotor10.spin(reverse, 50, percent);
-    }else{
-      liftMotor5.stop(brakeType::hold);
-      liftMotor10.stop(brakeType::hold);
-    }
-
-/*lift*/
-    
+  /*Initially, this function was intended to utilize the encoders of the lift motors to prevent the 
+    arm from hitting the ground. However, after this was shelved after the ability to elevator was 
+    discovered and for other reasons detailed in the FAQ. The code intended for this purpose never 
+    advanced beyond some untested theorycode, which can be found in earlier commits of this code in 
+    the Github repository. 
+  */
+  /*The code below does not utilize the moveArm function as it was the intention of the programmer to 
+    keep the functions used for the movement of the robot itself totally self-contained, especially 
+    considering that the moveArm function is one of the auton-specific functions. 
+    Apart from that, the code is as simple as possible. The speed at which the motors move as the 
+    buttons are being held was adjusted several times, 50% being a good middle ground after seeing 
+    how fast 90% was. 
+  */
+  if(upIn){
+    //printf("VEXcode");//Prior to competitions, this line led to "VEXcode" being spammed to the 
+                        //console every time R2 was held. No longer.
+    liftMotor5.spin(forward, 50, percent);
+    liftMotor10.spin(forward, 50, percent);
+  }else if(downIn){
+    liftMotor5.spin(reverse, 50, percent);
+    liftMotor10.spin(reverse, 50, percent);
+  }else{
+  /*If neither the R2 nor R1 buttons are being held down, then the arm will be held in place according 
+    to the brakeType hold. Since the armControl is being called every tick that the robot is running, 
+    then this conditional will run true the bulk of the time that the robot is being used. Holding the 
+    arm in place takes significant motor power considering the weight of the arm, and so this function 
+    is taking advantage of the two-motor arm system, which provides well enough strength for this task. 
+  */
+    liftMotor5.stop(brakeType::hold);
+    liftMotor10.stop(brakeType::hold);
+  }
 
 }
 
-void motorControl(float leftIn, float rightIn){
 
-  //TO EDIT:[[[[]]]]
-  /* drive*/
-  //left drive
-leftFrontMotor9.spin(forward, leftIn, percent);
+/* drive*///[[[[[[[[[[[[[[]]]]]]]]]]]]]]
+//motorControl(float leftIn, float rightIn)
+//This function moves the robot in whichever direction based on controller inputs (& driveControl calculations). 
+
+/*Parameter:
+    float leftIn
+    This value determines at what percent speed the left motors of the drivebase will move. This is 
+    done using the value created by the calculations of the driveControl function (see). 
+
+    float rightIn
+    This value determines at what percent speed the right motors of the drivebase will move. This is 
+    done using the value created by the calculations of the driveControl function.
+
+
+    Naturally, for both of these parameters, if the value is greater than 100, the motors will move 
+    at 100% speed, while if the value is lesser than zero, then the motors will not move.
+*/
+void motorControl(float leftIn, float rightIn){
+    /* If only one of the parameters is receiving input above 0 at a time, then the robot will pivot 
+       in place. This would only occur if only the right joystick is being moved at a specific point. 
+       The robot will turn in a different direction if one side of the motors has a higher speed, as 
+       determined by the difference between leftIn and rightIn. If the two parameters have the same 
+       value, then the robot can move perfectly backward or forward with no turning. 
+    */
+    //Left drive
+    leftFrontMotor9.spin(forward, leftIn, percent);
     leftMiddleMotor7.spin(forward, leftIn, percent);
     leftBackMotor2.spin(forward, leftIn, percent);
     
-    //right drive
+    //Right drive
     rightFrontMotor20.spin(forward, rightIn, percent);
     rightMotor6.spin(forward, rightIn, percent);
     rightBackMotor4.spin(forward, rightIn, percent);
 }
 
-//drivecontrol
 
+
+//driveControl(float fwdIn, float turnIn)
+//This function takes controller inputs and modified them for use in the motorControl.
+
+/*Parameter:
+    float fwdIn
+    This float value reflects the position of the first Joystick of the user, 100.0 being moved all 
+    the way upward while -100.0 being moved all the way down. The value is only representative of the 
+    vertical position of the joystick.
+
+    float turnIn
+    This float value reflects the position of the second Joystick of the user, 100.0 being moved all 
+    the way upward while -100.0 being moved all the way down. The value is only representative of the 
+    vertical position of the joystick.
+*/
 void driveControl(float fwdIn, float turnIn) {
-  Brain.Screen.clearScreen();
-  // place driver control in this while loop, so it runs infinitely until something tells it to do someting else
+  //Brain.Screen.clearScreen();//By clearing the screen with every movement, console.logs would never show. 
+  
+  /*These two values are to be the modified versions of the fwdIn and turnIn values, representing the 
+    total amount forward or backward (fwdVal) or left or right (turnVal) the robot is meant to move. 
+    These two separate values can be used to represent all four movements, as the values can be 
+    negative (for backward or right) and positive (forward or left), creating a very simple system 
+    only slightly changed by the conditionals below.
+  */
   float fwdVal;
   float turnVal;
+  /*With the deadzone (the global final integer that was set to be 15), if the absolute value of the 
+    fwdIn value (which is for the first joystick and represents forward and backward movement) is 
+    lesser than the deadzone, that means that the joystick is too close to the center of the joystick 
+    to warrant any movement, and to prevent the robot moving by itself by a slightly off-center 
+    joystick, the value is set to be zero for whichever one. Otherwise, fwdVal is set to be the 
+    original, non-absolute value of the fwdIn.*/
   if(fabs(fwdIn) > DEADZONE){
       fwdVal = fwdIn;
   }else{
       fwdVal = 0;
   }
-
+  /*The same process that was done for the fwdIn is now down for the turnVal, with it only being 
+    allowed to be used for movement if the joystick is farther than 15 units from the center. 
+  */
   if(fabs(turnIn)> DEADZONE){
     turnVal = turnIn;
   }else{
     turnVal = 0;
   }
-//left and right:
+/* The line of code below is the work of many generations of programmers and robotics teams/mentors. 
+    The motorControl function takes in two parameters, the first determining the speed of the left 
+    motors and the second determining the speed of the right motors. This function is tasked with 
+    both moving the robot forward and backward, and also the moving the robot in any paricular 
+    direction while the robot is moving, such as moving forward and then turning to the left. 
+
+    fwdVal is the value of the position of the first joystick. turnVal is the value of the second 
+    joystick. If they are both pushed all the way forward on the controller, then fwdVal + turnVal 
+    would be 200, which would be equivalent to the highest value the left motor can have its speed 
+    at, 100 (this is as stated in the motorControl documentation, with every value above 100 or 
+    lower than 0 immediately being converted into the closest real value between 0 and 100). 
+    Therefore, as the second argument would be rendered as 100 - 100, the robot would pivot leftward 
+    in place.
+    
+    Turning in any particular direction occurs when one of the two arguments below is greater than 
+    the other, which results in that direction being slightly favored in movement. For example, if 
+    the second joystick is not being moved from the center, then turnVal will be 0, and the 
+    motorControl function will be called with fwdVal being used for each argument, making both the 
+    left and right motors move at the exact same speed. 
+
+    Although this line of code seems like it would favor leftward movement, rightward movement 
+    (which would have a negative turnVal value due to the joystick being moved downward) would be 
+    just as favored due to how the first argument (which control left motors) would be decreased 
+    in value due to the negative turnVal, and the second argument increased in value due to the 
+    cancellation of the negatives. Through this logic repeated testing, this system of movement for 
+    the robot is able to exactly move the robot forward, backward, leftward, and rightward based on 
+    just two input values. 
+*/
   motorControl(fwdVal+turnVal, fwdVal - turnVal);
 }
 
-void userControl() {
 
-///code the left button, axis 3, to be the movement of the robot forward and backward
+
+
+//userControl()
+//This function takes controller inputs and sends them to their appropriate functions, allowing for user control and movement of the robot. 
+
+void userControl() {
+/*These two lines are the only two that are not within the continous while loop below. This is 
+  because these two lines set up the encoder to recall positioning of the arm, with whatever position 
+  the arm was in at the beginning of the program being set as being position zero. This does not have 
+  as much influence as how the encoder is used in the autonomous function, and so the arm can be in 
+  any position at the start of any non-autonomous drive. As stated in prior documentation and the FAQ, 
+  "the built-in motor encoder is utilized to retain the initial position of the lift motors in the 
+  program memory, e.g. storing the position that the arm is moved to before [the program is started]". 
+*/
 liftMotor5.setPosition(0, degrees);
 liftMotor10.setPosition(0, degrees);
     
+    //This while loop runs infinitely, considering no break calls are made throughout the entire program.
     while (true) {
     ///
-    driveControl(Controller1.Axis3.position(), Controller1.Axis1.position());
-    armControl(Controller1.ButtonR2.pressing(), Controller1.ButtonR1.pressing());
+    driveControl(Controller1.Axis3.position(), Controller1.Axis1.position());//The joysticks, which return a value from -100 to 100 depending on upward/downward positioning
+    armControl(Controller1.ButtonR2.pressing(), Controller1.ButtonR1.pressing());//The two top right buttons, which just return a boolean as to if they're being pressed.
 
-    //if doesn't work: test if Controller on itself will work
-    //these were axis2, I am changing them to axis3 to see if that will make it arcade.
-
-
-
-//to save resources
-    wait(20, msec);
+    wait(20, msec);//Done to save resources.
   }
 }
-//only 
 
 
 int main() {
