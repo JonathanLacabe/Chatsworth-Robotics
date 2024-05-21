@@ -144,6 +144,10 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   moment of continued motion due to past power being supplied to the motor, brake immediately stops 
   the motor.
 
+-Configuration Variable
+  Variables that are declared in the '#pragma region' of Vexcode (the upper lines of code), variables 
+  that serve as preprocessors to be used in th
+
 -Deadzone:
   The space less than or equal to 15 units away from the center of a joystick, where the joystick
   will oftentimes remain off-centered, leading to the robot moving very slowly without use of the
@@ -179,6 +183,11 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 
 -Omega:
   A Chatsworth High School V5 robot, the code for which you are currently viewing.
+
+-Preprocessor:
+  An operator that compiles before the rest of the program has compiled, which allows for text
+  substition. In Vexcode, this is used for declarations of irregular reference values such as
+  motors, motor groups, and any other piece of hardware that is being used.
 
 -Tank Drive:
   A control style that has individually controlled two sets of motors (the left and right wheels 
