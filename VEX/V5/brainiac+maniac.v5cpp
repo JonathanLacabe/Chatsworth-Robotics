@@ -88,13 +88,13 @@ d8'          `8b  `8'        88        88
 
 
 /*IF YOU ARE IMPORTING THIS CODE FROM GITHUB INTO VEXCODE V5: MAKE SURE TO ADD THE EIGHT MOTORS AND 
-  THE CONTROLLER IN THE DEVICES SCREEN AS DETAILED IN THE FAQ. ENSURE THE GENERATED ROBOT 
-  CONFIGURATION OF THE DEVICES IS IDENTICAL TO THE ONE IN THE GITHUB FILE, AS COPY-PASTING ALONE WILL 
-  NOT ADD THE DEVICES INTO THE DEVICES SCREEN. 
-  If you use an IDE such as VSCode, then there should be no issue, as the motors only need to be
-  copy-and-pasted in to function.
-  Unless you want to make your own version of the code with different motors and things, in which 
-  case feel free to change/add whatever you want.
+  THE CONTROLLER IN THE DEVICES SCREEN AS DETAILED IN THE FAQ. ENSURE THE GENERATED ROBOT CONFIG. 
+  VARIABLES OF THE DEVICES ARE IDENTICAL TO THOSE IN THE GITHUB FILE, AS COPY-PASTING ALONE WILL 
+  NOT ADD THE DEVICES INTO THE DEVICES SCREEN. If you use an IDE such as VSCode, then there should 
+  be no issue, as the motors only need to be copy-and-pasted in to function.
+  
+  This is all unless you want to make your own version of the code with different motors and things, 
+  in which case feel free to change/add whatever you want.
 */
 
 
@@ -105,11 +105,13 @@ d8'          `8b  `8'        88        88
 ==DICTIONARY==
 {Terms defined by coach Sam F.}
 
-This dictionary is relevant to terms that are frequently used within this program's documentation.
+The following dictionary is relevant to terms frequently used within this program's documentation.
+
 For additional Vex-specific terms to be defined, see here:
 https://v5rc-kb.recf.org/hc/en-us/articles/9636572958871-VEX-Robotics-Jargon
 For general robotics/engineering-related terms, see here:
 https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/products/vex_online/programming/robotc/reference/hp_glossary.pdf
+
 
 
 -Arcade Drive:
@@ -122,24 +124,24 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   see "Autonomous Routine".
 
 -Autonomous Routine:
-  The first 15 seconds of the match in which there is no driver input or input from the 
-  controller allowed. The robot must move according to a pre-programmed script that intends to 
-  maximum the number of points obtained during the time period, including obtaining the 'AWP' 
+  The first 15 seconds of the match in which there is no driver input nor input from the 
+  controller allowed. The robot must move according to a pre-programmed script intended to 
+  maximize the number of points obtained during the time period, including obtaining the 'AWP' 
   (see definition). Additionally, there is a one-minute autonomous skills match that teams can 
   partake in at any time during competitions, where teams have one minute to demonstrate the 
   amount of points that they can obtain using a pre-programmed specialized skills script. This is 
-  separate from the user matches, in which the driver controls the robot during the time period. 
+  separate from user matches, in which the driver controls the robot during the time period. 
 
 -A.W.P. (Autonomous Win Point):
-  A point obtainable through certain objectives in auto, worth half of one win, used in ranking 
+  A point obtainable through certain objectives in auto, worth half of one 'win', used in ranking 
   calculations.
 
 -brakeType:
-  A type that defines how the motor will act when you tell it to stop. There are three main 
+  A data type that defines how the motor will act when you tell it to stop. There are three main 
   brakeTypes: coast, hold, and brake. Coast is the default, where all power is cut and the motor 
   begins free-spinning. With coast, the motor will briefly continue spinning due to inertia. Hold 
   forces the motor to stop at the position it is at and to stay in place, preferable in systems in 
-  with more motors and higher levels of torque. Brake give opposite direc tion speed udtil it stops, 
+  with more motors and higher levels of torque. Brake give opposite direction speed until it stops, 
   forcing it in the opposite direction before cutting all power. While coast allows for a brief 
   moment of continued motion due to past power being supplied to the motor, brake immediately stops 
   the motor.
@@ -151,23 +153,23 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 
 -Deadzone:
   The space less than or equal to 15 units away from the center of a joystick, where the joystick
-  will oftentimes remain off-centered, leading to the robot moving very slowly without use of the
-  controller. To prevent this, a block for all inputs from the joystick within the deadzone area
-  must be created, seen in the driveControl function.
+  will oftentimes remain off-centered after use, leading to the robot moving very slowly without 
+  use of the controller. To prevent this, a block for all inputs from the joystick within the 
+  deadzone area must be created, seen in the driveControl function.
 
 -Far/Near Side Auto:
   In the game Over Under, which this program was designed for, there are two sides on which the 
   robot can be placed during the 15 second and 1 minute autonomous periods. Because of this, the 
-  movements of the auto of one side essentially mirror those of the other, along with slight changes 
-  to account for inconsistencies.
+  movements of the auto of one side essentially mirror those of the other, along with slight 
+  changes made to account for inconsistencies as detailed in the autonomous.
 
 -Matchloading:
   General: 'Entry of a game object by a human player.' How this works is dependent on the game; 
-  for example, in the 2024-2025 game "High Stakes", there is no matchloading whatsoever.
+  for example, in the 2024-2025 V5 game "High Stakes", there is no matchloading whatsoever.
 
 -Motor Cartridges:
   Different gear amounts/ratios in the motors, which gives them different numbers of revolutions 
-  per minute. Green is the default, with an even amount of torque and speed. Red cartridges prefer 
+  per minute. Green is the default, with an even amount of torque and speed. Red cartridges are 
   high torque, with stronger motors but reduced speed. Blue cartridges are high speed, with weaker 
   motors that run a lot faster. 
 
@@ -179,7 +181,7 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
 -Motor Groups:
   A config. variable that can be declared that includes multiple motors, allowing actions to be 
   performed across multiple motors with a call to one motor group, similar to a traversal of 
-  motors. A motor group would have been preferrable to use for the left and right motors of the 
+  motors. A motor group would have been preferable to use for the left and right motors of the 
   drivebase, but this was not done for reasons outlined in the FAQ.
 
 -Omega:
@@ -214,21 +216,22 @@ https://web.archive.org/web/20240519010045id_/http://cmra.rec.ri.cmu.edu/product
   The most important rule in Vex, FRC, and all of Robotics.
 
 -Sequentialization:
-  A general rule of programming where lines of code run top-to-bottom, maintained during all 
-  programming events except for special circumstances. The program will always wait until one 
-  line has finished for the next one to run. In Vexcode (as inother languages), this can be 
-  circumvented in functions such as spinFor through the addition of 'false' argument at the end 
-  of the function call, which will cause the next line to run concurrent to the previous. This 
-  is useful in a variety of circumstances, one instance described in the driveLat function. 
+  A general rule of programming where lines of code are compiled top-to-bottom (except for 
+  preprocessors), with the program always waiting until one line has finished for the next one to 
+  run. This rule can be maintained during all programming events except for special circumstances: 
+  In Vexcode (as in other languages), this can be circumvented in functions such as spinFor through 
+  the addition of 'false' argument at the end of the function call, which will cause the next line 
+  to run concurrent to the previous. This is useful in a variety of circumstances, one instance 
+  described in the driveLat function. 
 
 -Tank Drive:
-  A control style that has individually controlled two sets of motors (the left and right wheels 
-  of the robot) using the joysticks or another mechanism on the controller, with one joystick 
-  controlling the left motors and the other controlling the right motors. Thus, pushing the 
-  joysticks all the way forward or backward would make the robot move straight forward or backward 
-  without turning. 
+  A control style that has where two sets of motors (the left and right wheels of the robot) are 
+  individually controlled using the joysticks or another mechanism on the controller, with one 
+  joystick controlling the left motors and the other controlling the right motors. Thus, pushing 
+  the joysticks all the way forward or backward would make the robot move straight forward or 
+  backward without turning. 
   Tank drive is useful in any instance in which much power and speed is needed in one direction, 
-  where extra maneuverability is not a factor. 
+  where extra maneuverability is not necessary. 
 
 
 
