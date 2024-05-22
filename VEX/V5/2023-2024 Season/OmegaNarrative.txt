@@ -1,0 +1,58 @@
+  The first ever Chatsworth High School Robot, the 'Omega' bot constructed for the 2023-2024 
+  season, 'Over Under', had a complex history, with months of work fixing dozens of errors, 
+  oversights, and random changes in the functionality, especially occurring in the autonomous 
+  routine. With most of the team being rookies in robotics as a whole, this was the first ever 
+  program written for Vex/robotics by lead programmer Jonathan Lacabe.
+
+  Concurrent to the construction of the first version of the robot sometime in early December of 
+  2023, the first drafts and plans for the code of the robot were being created, mainly using 
+  Youtube tutorials.[[[the specific ones being seen in the historical resources section of the directory]]]
+  The original script utilized tank drive to move (defined in the dictionary), and this was the
+  version that the first test of the Omega bot was performed with on December 9th, 2023. 
+  Unfortunately, other than some screenshots from the period, the original script from the first
+  test of the robot is lost, due to the lack of Github or any collaborative programming. Github 
+  would only be utilized starting in April 2024, after the final Vex V5 season competition of 
+  Chatsworth.
+
+  The most grueling part of the programming process was undoubtably the writing of the autonomous 
+  routine, of which every second of the 15-second routine that was successfully programmed would
+  incur errors after having been repeatedly tested, issues that were determined to have occurred
+  for reasons outlined in rule 2. of the Rules of Autonomous. Each major section of the autonomous
+  took two to three days of work (the team could only meet for an hour and a half after school 
+  every day), with errors coming up all the way to the first competition. This is not factoring in 
+  the weeks of corrections and compensations for differences in angling that would occur after the 
+  'completion' of the autonomous program. This was compounded by the need to create a far side auto, 
+  which turned out not to be as simple as just making the values of the near side negative.
+ 
+  This is all led to the favoring of a more generalized routine, as exemplified in section #10 of 
+  the autonomous routine. At the end of the routine, when the robot is moving toward the barrier, 
+  the robot would be slightly off-center, and the majority of the time, the robot would be angled 
+  too far left, resulting in scraping against the wall and a failure to reach the goal. Occasionally, 
+  the robot would be angled to the right, which resulted in its own problems, but by focusing on the 
+  most common error, the programmers were able to ensure a much higher rate of success. This was done 
+  by adding a slight turn rightward right before the end movement, which straightened the path of the 
+  robot. Of course, this had the reverse effect on the occasions that the robot was angled too far to 
+  the right, which led to a near ensured failure. This led to more generalization, with the number of 
+  degrees in the rightward turn being reduced, making the end path less straight (but still reaching 
+  the end barrier), but reducing the rate of failure for the instances that the robot was angled to 
+  the left. The robot then had a majority success rate in both scenarios. In future projects, the team 
+  intends to be data-centric, with a consistent starting position being created using a geometric 
+  instrument and the rates of failure and success, as well as the specific scenarios of the failures 
+  being analyzed to determine the most common starting point of failure in the routine before making 
+  any changes to the code. This will allow the team to consider the huge amount of variables that can 
+  effect the success of the routine, as well ensuring error prevention strategies (like testing code at 
+  maximum battery and preventing motor burn-out), both of these described in rule 2. of the Rules of 
+  Autonomous.
+
+  Many on the robotics team contributed to the programming effort, such as Shoaib Pasha and Ansh Singh. 
+  On a day that Jonathan L. was not present, Shoaib took over writing the autonomous for the day, 
+  writing parts of sections #5 and #6. 
+
+  The efforts of team coach and mentor Sam F. cannot be overstated in relation to the design of the 
+  robot and the writing of the code, with his recommendations for movement programming forming the basis 
+  for the movement functions seen at the bottom, as well as his providing of stability and focus to the 
+  crazy team. 
+
+  Special thanks to team mentor Sam F. and junior programmers Ansh Singh, Shoaib Pasha, Lucas Solares, 
+  Kairo Morrison, Caleb Torres-Vasquez, Nathan Lavy, Jayden Khanlian, and Quentin Dionisio for creating 
+  the robot.
