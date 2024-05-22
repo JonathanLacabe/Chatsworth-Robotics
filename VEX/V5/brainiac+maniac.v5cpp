@@ -658,7 +658,7 @@ if(!facingNear){
   //ACTUAL AUTONOMOUS ROUTINE. 
   /*If you would like to understand the field of the Over Under game and the path of which the the 
     robot takes through the autonomous routine, then look at the 'OverUnderAutonomous.png' file in 
-    the V5 folder of the Github repository.
+    the Vex -> V5 -> 2023-2024 Season folder in the Github repository.
   */
 
 
@@ -732,7 +732,7 @@ if(!facingNear){
   respectively.
 
   For a better understanding of the Vex controller and how it is used in these functions, find the 
-  'VexController.png' file in the V5 folder of the Github repository. 
+  'VexController.png' file in the Vex folder of the Github repository. 
   
   The values outputted by the joystick range from -100 to 100, based on the vertical position of the 
   joystick only. The left joystick is used to determine forward and backward movement, while the 
