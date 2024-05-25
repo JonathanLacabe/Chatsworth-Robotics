@@ -390,6 +390,12 @@ void autonomous(void) {
   Brain.Screen.clearScreen();
   Brain.Screen.print("autonomous code");
 
+/*In this autonomous, the robot should be positioned directly in front of the match load zone, facing
+  the mid-field barrier. In order for the human player to matchload, the robot must be touching the 
+  match load zone wall.
+*/
+
+
 
 /*In order to faciliate preloading and to make the arm movement code function, the built-in motor 
   encoder is utilized to retain the initial position of the lift motors in the program memory, e.g. 
@@ -410,21 +416,39 @@ void autonomous(void) {
   liftMotor10.setPosition(0, degrees);
 
 
-
+  /*The lift motors are set to have a medium level of velocity while the drive motors are set to 90% 
+    speed, considering the routine is mainly composed of driving movements.
+  */
   liftMotor5.setVelocity(68, percent);
   liftMotor10.setVelocity(68, percent);
   driveSpeed(90);
 
+  /*#1 - During the first 45 seconds of the routine, the robot will be still while the human player rolls
+    as many triballs onto the robot as possible, creating a huge pile of triballs directly in front and
+    around the robot. If one of the triballs were to get stuck in the arm of the robot, the human player 
+    would immediately stop dropping the triballs, as there is a rule in Over Under that the robot can
+    only have one triball on it at a time. The team specifically trained to prevent this from happening,
+    as this would significantly limit the possible points that could be obtained in the autonomous.
+    All the following actions in the routine are meant to ensure that the robot is able to traverse and 
+    push the mass of triballs unto the other side of the field without getting stuck.
+  */
+  
   wait(45, seconds);
-  //#1 - Set the arm to position where it can hit the bar without going through.
+
+  /*#2 - Set the arm to a position where it can hit the barrier bar at the end without going through.
+    This position is also optimal for pushing the triballs.
+  */
   liftMotor5.spinToPosition(80, degrees, false);
   liftMotor10.spinToPosition(80, degrees, false);
-
   wait(0.6, seconds);
-  //#2 - move way forward so that the robot could reach the end and push all of the triballs in.
-  driveLat(300);
 
-  //#3 - Wait slightly any time and then come all the way back, hopefully touching the back bar at the very end.
+
+  /*#3 - The following movements, turns, and wait times were all randomly created with the end 
+    goal of the robot reaching the end barrier and pushing as many triballs as possible without
+    getting stuck. This incremental system of movement saw as much success as this limited 
+    routine could achieve.
+  */
+  driveLat(300);
    wait(0.5, seconds);
   driveLat(-200);
   wait(0.25, seconds);
@@ -453,7 +477,10 @@ void autonomous(void) {
   wait(0.2, seconds);
   driveLat(-1000);
 
-  //#4 - Reset the robot arm to its initial position aso that human player can matchload.
+  /*#4 -Reset the robot arm to its initial position and drive the robot all the way backward 
+    (hopefully touching the back bar) so that human player can matchload any remaining 
+    triballs.
+  */
   liftMotor5.spinToPosition(0, degrees, false);
   liftMotor10.spinToPosition(0, degrees, false);
 
@@ -691,3 +718,5 @@ int main() {
     wait(100, msec);
   }
 }
+
+2024 Chatsworth Robotics
